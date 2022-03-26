@@ -7,7 +7,7 @@
 
 //System Libraries
 #include <iostream>  //Input/Output Library
-#include <string>   // string
+#include <cstring>   // string
 using namespace std;
 
 // function prototypes

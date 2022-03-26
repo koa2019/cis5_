@@ -11,44 +11,27 @@
 using namespace std;
 
 //Function Prototypes
-void playGameMsg(){
-    cout << "Enter Y to play.\n";
-}
-void paperWinRk(){
-    cout << "Paper covers rock.\n";
-}
-void scissorWinPpr(){
-    cout << "Scissors cuts paper.\n";
-}
-void rockWScsr(){
-    cout << "Rock breaks scissors.\n";
-}
-void tie(){
-    cout << "Nobody wins.\n";
-}
-void p1_win(){
-    cout << "Player 1 Wins!\n";
-}
-void p2_win(){
-    cout << "Player 2 Wins!\n";
-}
+void playGameMsg();
+void paperWinRk();   
+void scissorWinPpr();
+void rockWScsr();
+void tie();
+void p1_win();
+void p2_win();
 
 //Execution Begins Here!
 int main(int argc, char** argv) {
 
     //Declare Variables
-    string p1, p2;  // player1 player2
-    char ans;       // holds users answer to continue or quit the game
+    string p1, p2; // player1 player2
+    char ans; // holds users answer to continue or quit the game
 
-    playGameMsg();      
-    cin >> ans;
-            
-     // loop allows player to keep playing with a Y or y input
-    while ((ans == 'Y') || (ans == 'y')) {
-
-        //Map inputs -> outputs
+    // loop allows player to keep playing with a Y or y input
+    do {
+        
+        // get user's inputs
         cout << "\nRock Paper Scissors Game\n"
-             << "Input Player 1 and Player 2 Choices\n";
+                << "Input Player 1 and Player 2 Choices\n";
         cin >> p1 >> p2;
 
         // conditional converts lowercase r,s,p to uppercase for player 1's input
@@ -78,7 +61,7 @@ int main(int argc, char** argv) {
         } else if (p1 == "R" && p2 == "S") {
             p1_win();
             rockWScsr();
-            
+
         } else if (p1 == "R" && p2 == "P") {
             p2_win();
             paperWinRk();
@@ -93,15 +76,45 @@ int main(int argc, char** argv) {
 
         } else if (p1 == p2) {
             tie();
-            
+
         } else {
             cout << "Invalid Input.\n";
         }
-        
+
         playGameMsg();
         cin >> ans;
-    }
-    
+
+    } while ((ans == 'Y') || (ans == 'y'));
+
     //Exit stage right or left!
     return 0;
+}
+
+// function definitions
+void playGameMsg() {
+    cout << "Enter Y to play.\n";
+}
+
+void paperWinRk() {
+    cout << "Paper covers rock.\n";
+}
+
+void scissorWinPpr() {
+    cout << "Scissors cuts paper.\n";
+}
+
+void rockWScsr() {
+    cout << "Rock breaks scissors.\n";
+}
+
+void tie() {
+    cout << "Nobody wins.\n";
+}
+
+void p1_win() {
+    cout << "Player 1 Wins!\n";
+}
+
+void p2_win() {
+    cout << "Player 2 Wins!\n";
 }
