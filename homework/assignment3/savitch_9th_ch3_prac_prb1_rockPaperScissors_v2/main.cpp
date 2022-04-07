@@ -50,7 +50,10 @@ int main(int argc, char** argv) {
 
         // conditional checks who won. R = rock, P=paper, S=Scissors
         // rock beats Scissors, paper beats rock, Scissors beat paper, or Nobody wins
-        if (p1 == "P" && p2 == "R") {
+        if (p1 == p2) {
+            tie();
+
+        } else if (p1 == "P" && p2 == "R") {
             p1_win();
             paperWinRk();
 
@@ -74,12 +77,7 @@ int main(int argc, char** argv) {
             p2_win();
             rockWScsr();
 
-        } else if (p1 == p2) {
-            tie();
-
-        } else {
-            cout << "Invalid Input.\n";
-        }
+        } else { cout << "Invalid Input.\n"; }
 
         playGameMsg();
         cin >> ans;

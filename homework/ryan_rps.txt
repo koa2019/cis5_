@@ -63,7 +63,8 @@ int main(int argc, char** argv) {
     else if ((P1 == 'P') && P2 == 'R') {
         winner = "Paper covers rock.";
     }
-        // change the next 4 else if expressions below, 
+    
+	// change the next 4 else if expressions below, 
         // so they look similar to my code above
         // once you get your code working. Delete any code you don't need
         // and format its spacing
@@ -82,7 +83,7 @@ int main(int argc, char** argv) {
         cout << "Invalid entry";
     }
 
-    // DELETE all of your lowercase conditionals  below because 
+    // DELETE all of these lowercase conditionals below because 
     // we converted the inputs into capital letters
 
     /*    else if (P1 == 's') {

@@ -12,8 +12,14 @@ using namespace std;
 
 //Function Prototypes
 
-//Execution Begins Here!
+//Function Prototypes
+void playGameMsg();
+void paperWinRk();   
+void scissorWinPpr();
+void rockWScsr();
+void tie();
 
+//Execution Begins Here!
 int main(int argc, char** argv) {
 
     //Declare Variables
@@ -44,29 +50,30 @@ int main(int argc, char** argv) {
 
         // conditional checks who won. R = rock, P=paper, S=Scissors
         // rock beats Scissors, paper beats rock, Scissors beat paper, or Nobody wins
-        if (p1 == "P" && p2 == "R") {
-            cout << "Paper covers rock.";
+        if (p1 == p2) {
+            tie();
+        } else if (p1 == "P" && p2 == "R") {
+            paperWinRk();
 
         } else if (p1 == "P" && p2 == "S") {
-            cout << "Scissors cuts paper.";
+            scissorWinPpr();
 
         } else if (p1 == "R" && p2 == "S") {
-            cout << "Rock breaks scissors.";
+            rockWScsr();
 
         } else if (p1 == "R" && p2 == "P") {
-            cout << "Paper covers rock.";
+            paperWinRk();
 
         } else if (p1 == "S" && p2 == "P") {
-            cout << "Scissors cuts paper.";
+            scissorWinPpr();
 
         } else if (p1 == "S" && p2 == "R") {
-            cout << "Rock breaks scissors.";
+            rockWScsr();
 
-        } else if (p1 == p2) {
-            cout << "Nobody wins.\n";
         } else {
             cout << "Invalid Input.\n";
         }
+
         cout << "\nPress Y to continue playing.\n";
         cin >> ans;
 
@@ -74,4 +81,25 @@ int main(int argc, char** argv) {
 
     //Exit stage right or left!
     return 0;
+}
+
+// function definitions
+void playGameMsg() {
+    cout << "Enter Y to play.";
+}
+
+void paperWinRk() {
+    cout << "Paper covers rock.";
+}
+
+void scissorWinPpr() {
+    cout << "Scissors cuts paper.";
+}
+
+void rockWScsr() {
+    cout << "Rock breaks scissors.";
+}
+
+void tie() {
+    cout << "Nobody wins.";
 }
