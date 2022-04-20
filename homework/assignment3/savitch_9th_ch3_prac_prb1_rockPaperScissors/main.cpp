@@ -12,61 +12,94 @@ using namespace std;
 
 //Function Prototypes
 
+//Function Prototypes
+void playGameMsg();
+void paperWinRk();   
+void scissorWinPpr();
+void rockWScsr();
+void tie();
+
 //Execution Begins Here!
 int main(int argc, char** argv) {
 
     //Declare Variables
     string p1, p2;
+    char ans;
+
+    do {
+        //Map inputs -> outputs
+        cout << "Rock Paper Scissors Game\n"
+                << "Input Player 1 and Player 2 Choices\n";
+        cin >> p1 >> p2;
+
+        // conditional converts lowercase r,s,p to uppercase for player 1's input
+        p1 == "r" ? p1 = "R" :
+
+                p1 == "p" ? p1 = "P" :
+
+                p1 == "s" ? p1 = "S" : p1 = p1;
 
 
-    //Map inputs -> outputs
-    cout << "Rock Paper Scissors Game\n"
-            << "Input Player 1 and Player 2 Choices\n";
-    cin >> p1 >> p2;
+        // conditional converts lowercase r,s,p to uppercase for player 2's input
+        p2 == "r" ? p2 = "R" :
 
-    // conditional converts lowercase r,s,p to uppercase for player 1's input
-    p1 == "r" ? p1 = "R" :
+                p2 == "p" ? p2 = "P" :
 
-            p1 == "p" ? p1 = "P" :
-
-            p1 == "s" ? p1 = "S" : p1 = p1;
+                p2 == "s" ? p2 = "S" : p2 = p2;
 
 
-    // conditional converts lowercase r,s,p to uppercase for player 2's input
-    p2 == "r" ? p2 = "R" :
+        // conditional checks who won. R = rock, P=paper, S=Scissors
+        // rock beats Scissors, paper beats rock, Scissors beat paper, or Nobody wins
+        if (p1 == p2) {
+            tie();
+        } else if (p1 == "P" && p2 == "R") {
+            paperWinRk();
 
-            p2 == "p" ? p2 = "P" :
+        } else if (p1 == "P" && p2 == "S") {
+            scissorWinPpr();
 
-            p2 == "s" ? p2 = "S" : p2 = p2;
+        } else if (p1 == "R" && p2 == "S") {
+            rockWScsr();
 
+        } else if (p1 == "R" && p2 == "P") {
+            paperWinRk();
 
-    // conditional checks who won. R = rock, P=paper, S=Scissors
-    // rock beats Scissors, paper beats rock, Scissors beat paper, or Nobody wins
-    if (p1 == "P" && p2 == "R") {
-        cout << "Paper covers rock.";
+        } else if (p1 == "S" && p2 == "P") {
+            scissorWinPpr();
 
-    } else if (p1 == "P" && p2 == "S") {
-        cout << "Scissors cuts paper.";
+        } else if (p1 == "S" && p2 == "R") {
+            rockWScsr();
 
-    } else if (p1 == "R" && p2 == "S") {
-        cout << "Rock breaks scissors.";
+        } else {
+            cout << "Invalid Input.\n";
+        }
 
-    } else if (p1 == "R" && p2 == "P") {
-        cout << "Paper covers rock.";
+        cout << "\nPress Y to continue playing.\n";
+        cin >> ans;
 
-    } else if (p1 == "S" && p2 == "P") {
-        cout << "Scissors cuts paper.";
-
-    } else if (p1 == "S" && p2 == "R") {
-        cout << "Rock breaks scissors.";
-
-    } else if (p1 == p2) {
-        cout << "Nobody wins.";
-    }
-    else {
-        cout << "Invalid Input.\n";
-    }
+    } while (ans == 'Y' || ans == 'y');
 
     //Exit stage right or left!
     return 0;
+}
+
+// function definitions
+void playGameMsg() {
+    cout << "Enter Y to play.";
+}
+
+void paperWinRk() {
+    cout << "Paper covers rock.";
+}
+
+void scissorWinPpr() {
+    cout << "Scissors cuts paper.";
+}
+
+void rockWScsr() {
+    cout << "Rock breaks scissors.";
+}
+
+void tie() {
+    cout << "Nobody wins.";
 }

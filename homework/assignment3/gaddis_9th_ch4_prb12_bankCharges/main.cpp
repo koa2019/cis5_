@@ -10,50 +10,50 @@
 #include <iomanip>  // setw()
 using namespace std;
 
-//User Libraries
-
-//Global Constants, no Global Variables are allowed
-//Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
-
-//Function Prototypes
-
-//Execution Begins Here!
-
 int main(int argc, char** argv) {
-    //Set the random number seed
 
     // Constants
     const float LOWBALFEE = 15.00, // low balance bank fees
-            MONTHFEE = 10.00; // monthly bank fee
+                MONTHFEE = 10.00; // monthly bank fee
 
     //Declare Variables
-    unsigned short nChks;
-    float balance = 0.00, fees = 0.00, lowBal = 0.00, ttlFees, newBal = 0.00;
-
-    //Initialize or input i.e. set variable values
+    short nChks;
+    float balance = 0.00,   // beginning balance
+            fees = 0.00,    // check fees
+            lowBal = 0.00,  // low balance
+            ttlFees = 0.00,   //total fees 
+            newBal = 0.00;  // ending balance after total fees withdrawn
 
     //Map inputs -> outputs
     cout << "Monthly Bank Fees\n"
-            << "Input Current Bank Balance and Number of Checks\n";
-    cin >> balance >> nChks;
+         << "Input Current Bank Balance and Number of Checks\n";
+    cin  >> balance >> nChks;
 
-    if (balance < 0) { // Checks for a negative balance
+    // Checks for a negative balance
+    if (balance < 0) { 
 
         cout << "Account overdrawn";
         return 0;
+    } 
+    
+    // valiates number of checks is not a negative number
+    if (nChks <0 ){
+        cout << "Number of checks can not be a negative number.\n";
+        return 0;
     }
 
-    if (balance < 400) { // adds LOW BALANCE fee to account charges
-
+    // adds LOW BALANCE fee to account charges
+    if (balance < 400) { 
+        
         lowBal = LOWBALFEE;
-
-        ttlFees += LOWBALFEE + MONTHFEE;
+        ttlFees += lowBal + MONTHFEE;
 
     } else {
         ttlFees += MONTHFEE;
     }
     
-    if (nChks >= 60) { // 60 or more checks written in the month
+    // 60 or more checks written in the month
+    if (nChks >= 60) { 
 
         fees = nChks * .04;
         ttlFees += fees;
@@ -76,6 +76,7 @@ int main(int argc, char** argv) {
         fees = nChks * .10;
         ttlFees += fees;
         newBal = balance - ttlFees;
+        
     } else { cout << "Oops Error. "; }
 
     //Display the outputs

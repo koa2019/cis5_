@@ -15,18 +15,18 @@ int main(int argc, char** argv) {
     //Set the random number seed
 
     //Declare Variables
-    int num,
-            n1s,
-            n10s,
-            n100s,
-            n1000s;
+    int num,    //number input
+        n1s,    // number of ones
+        n10s,   // number of tens
+        n100s,   // number of one hundreds
+        n1000s;   // number of one thousands
 
-    string roman;
+    string roman;   // roman numeral 
 
     //Map inputs -> outputs
     cout << "Arabic to Roman numeral conversion.\n"
-            << "Input the integer to convert.\n";
-    cin >> num;
+         << "Input the integer to convert.\n";
+    cin  >> num;
 
     //Display the outputs
     // calculates the number of 1000's from the number 
