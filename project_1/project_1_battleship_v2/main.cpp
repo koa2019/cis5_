@@ -1,9 +1,10 @@
 /* 
  * File:   main.cpp
  * Author: Danielle Fernandez
- * Created on April 20, 2022,  1:22 PM
- * Purpose: Project 1. Covers chapters 1-5 in Gaddis. Battleship v1
- * This version 1 plays until a player wins 1 game and then asks
+ * Created on April 20, 2022,  4:16 PM
+ * Purpose: Project 1. Covers chapters 1-5 in Gaddis. Battleship v2
+ * Version 2 plays 
+ * until a player wins 1 game and then asks
  * if they want to play again. Ships locations and players guesses
  * are randomly generated.
  */
@@ -13,6 +14,7 @@
 #include <cstdlib>  // rand()
 #include <ctime>    // time library for rand()
 #include <cstring>  // string library
+#include <iomanip>  // fixed, setprecision()
 
 using namespace std;
 
@@ -76,7 +78,7 @@ int main(int argc, char** argv) {
             if (p1Win < 1) {
 
                 //*************** Player 2's Turn *************
-                cout << "\n\t" << P2 << gussMsg;                
+                cout << "\n\t" << P2 << gussMsg;
                 p2Guess = rand() % (MAX - MIN) + MIN;
 
                 if (p2Guess == p1Ship1) {
@@ -101,7 +103,7 @@ int main(int argc, char** argv) {
 
         cout << "Play again? ";
         cin >> ans;
-        
+
         bool playAgn = false;
         if (ans == 'y') {
             playAgn = true;
@@ -118,10 +120,6 @@ int main(int argc, char** argv) {
     } while ((ans == 'y') || ans == 'Y');
 
 
-
-
-
-
     // exit code
     return 0;
 }
@@ -130,7 +128,24 @@ int main(int argc, char** argv) {
 //*************************************
 
 void startMsg() {
-    cout << "**************************"
-            << "\n\tBATTLESHIP\n"
-            << "**************************";
+    for (int i = 0; i <= 2; i++) {
+
+        switch (i) {
+            case 0:
+            case 2:
+            {
+                for (int j = 0; j < 26; j++) {
+                    cout << "*";
+                }
+                cout << endl;
+                break;
+            }
+            case 1:
+            {
+                cout << "\tBATTLESHIP\n";
+                break;
+            }
+        }
+
+    }
 }
