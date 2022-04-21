@@ -3,10 +3,9 @@
  * Author: Danielle Fernandez
  * Created on April 20, 2022,  4:16 PM
  * Purpose: Project 1. Covers chapters 1-5 in Gaddis. Battleship v2
- * Version 2 plays 
- * until a player wins 1 game and then asks
- * if they want to play again. Ships locations and players guesses
- * are randomly generated.
+ * Version 2: inside the banner() I added a for loop to output 3 rows, then
+ *            there's a switch() outputs the contents of each row which is 
+ *            either stars or a variable that was passed from the function call.
  */
 
 // System Libraries: 
@@ -24,7 +23,7 @@ using namespace std;
 // Physics/Chemistry/Math/Conversions
 
 // Function prototypes
-void startMsg();
+void banner(string);
 
 // Program execution begins here
 
@@ -34,11 +33,12 @@ int main(int argc, char** argv) {
 
     // declare variables
     const char MIN = 1,
-            MAX = 14;
+               MAX = 14;
     const string HIT = "IT\'S A HIT!\n";
     const string MISS = "IT\'S A MISS!\n";
     const string P1 = "Player 1 ";
     const string P2 = "Player 2 ";
+    
     char ans;
     int p1Guess,
             p2Guess,
@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
         p1Ship1 = rand() % (MAX - MIN) + MIN;
         p2Ship1 = rand() % (MAX - MIN) + MIN;
 
-        startMsg();
+        banner("BATTLESHIP");
 
         while ((p1Win < 1) && (p2Win < 1)) {
 
@@ -61,19 +61,15 @@ int main(int argc, char** argv) {
             cout << "\n\t" << P1 << gussMsg;
             p1Guess = rand() % (MAX - MIN) + MIN;
 
-
             // map the inputs to the outputs
             if (p1Guess == p2Ship1) {
                 p1Win++;
                 cout << HIT;
 
-                if (p1Win > 0) {
-                    cout << p1Guess << " == " << p2Ship1 << endl;
-                }
-
-            } else {
-                cout << p1Guess << endl << MISS;
-            }
+                if (p1Win > 0) cout << p1Guess << " == " << p2Ship1 << endl;
+                
+            } else cout << p1Guess << endl << MISS;
+       
 
             if (p1Win < 1) {
 
@@ -85,21 +81,16 @@ int main(int argc, char** argv) {
                     p2Win++;
                     cout << HIT;
 
-                    if (p2Win > 0) {
-                        cout << p2Guess << " == " << p1Ship1 << endl;
-                    }
-                } else {
-                    cout << p2Guess << endl << MISS;
-                }
+                    if (p2Win > 0) cout << p2Guess << " == " << p1Ship1 << endl;
+                    
+                } else cout << p2Guess << endl << MISS;
             }
         }
+        
         // Display inputs to outputs
-        cout << "\n****************************\n";
-        cout << "\tResults\n";
-        cout << "****************************\n";
-        cout << "Player 1 Wins: " << p1Win << endl;
-        cout << "Player 2 Wins: " << p2Win << endl;
-        cout << "****************************\n\n";
+        banner("SCOREBOARD");     
+        cout << P1 << "Wins: " << p1Win << endl;
+        cout << P2 << "Wins: " << p2Win << endl;
 
         cout << "Play again? ";
         cin >> ans;
@@ -127,14 +118,15 @@ int main(int argc, char** argv) {
 //      FUNCTION DEFTIONTIONS
 //*************************************
 
-void startMsg() {
+void banner(string header) {
+    
     for (int i = 0; i <= 2; i++) {
 
         switch (i) {
             case 0:
             case 2:
             {
-                for (int j = 0; j < 26; j++) {
+                for (int j = 0; j < 32; j++) {
                     cout << "*";
                 }
                 cout << endl;
@@ -142,9 +134,10 @@ void startMsg() {
             }
             case 1:
             {
-                cout << "\tBATTLESHIP\n";
+                cout << setw(21) << header << endl;
                 break;
             }
+            default: cout << "Error in banner().\n";
         }
 
     }
