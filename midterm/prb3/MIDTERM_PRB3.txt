@@ -1,0 +1,4 @@
+passed TC0 & 4 together.
+passed tv 5 with specialTens(). try input 2911-2919
+passed tc 1, 2,3 with inputs 999-1
+tc 1 - case 0 in tens place - input 11-19
