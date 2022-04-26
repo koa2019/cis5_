@@ -1,0 +1,4 @@
+
+Averages out of 3 games played
+Player 1 won 100% of the time.
+Player 2 won 0% of the time.
