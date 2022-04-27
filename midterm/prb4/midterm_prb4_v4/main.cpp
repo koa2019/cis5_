@@ -3,7 +3,7 @@
  * File:   main.cpp
  * Author: Danielle Fernandez
  * Created on April 25, 2022,  1:20 PM
- * Purpose:  ISP charges v3
+ * Purpose:  ISP charges
  */
 
 //System Libraries Here
@@ -87,11 +87,11 @@ int main(int argc, char** argv) {
     }
 
     //Output the Charge
-    cout << fixed << setprecision(2);
-    cout << "$" << bill << " ";
+    cout << fixed << showpoint << setprecision(2);
+    cout << setw(1) << "$" << setw(6) << left << bill;
 
     //Output the cheapest package and the savings
-    cout << cheapst << "$" << save << endl;
+    cout << setw(2) <<cheapst << setw(1) << "$" << save << endl;
 
     //Exit
     return 0;
@@ -103,33 +103,26 @@ int main(int argc, char** argv) {
 string getBestC(int hrs) {
 
     string bestPlan;
-    bestPlan = (hrs>0 && hrs<11)? "A " :
-    ((hrs > 10) && (hrs < 35)) ? "B " :
-            (hrs > 34) ? "C " : "";
+    bestPlan = (hrs>0 && hrs<=10)? "A " :
+    ((hrs >=11) && (hrs <=34)) ? "B " :
+            (hrs >=35) ? "C " : "";
             
     return bestPlan;
 }
 float getSavingsC(int hrs, float cost) {
 
     float saving;
-    if(hrs>0 && hrs<11){
-        saving=PLANC-PLANA;
-    } else if ((hrs > 10) && (hrs < 35)) {
-        saving = PLANB-PLANC;
-    } else if (hrs > 34) {
-        saving = 0;
-    } 
+    if(hrs>0 && hrs<=10) saving=PLANC-PLANA;
+    else if ((hrs >=11) && (hrs <=34)) saving = PLANC-PLANB;
+    else if (hrs > 34) saving = 0;
 
     return saving;
 }
-
 // 
 float pkgC(int hrs) {
-
-    float cost;
     
-    if(hrs>0) cost= PLANC;
-
+    float cost;
+    if(hrs>=0) cost= PLANC;
     return cost;
 }
 
@@ -139,13 +132,9 @@ float pkgC(int hrs) {
 float getSavingsB(int hrs, float cost) {
 
     float saving;
-    if(hrs>0 && hrs<11){
-        saving=PLANB-PLANA;
-    } else if ((hrs > 10) && (hrs < 35)) {
-        saving = 0;
-    } else if (hrs > 34) {
-        saving = cost-PLANC;
-    } else "Error in getSavingsB() else.\n";
+    if(hrs>0 && hrs<=10) saving=PLANB-PLANA;
+    else if ((hrs >=11) && (hrs <= 34)) saving = 0;
+    else if (hrs >=35) saving = cost-PLANC;
 
     return saving;
 }
@@ -154,10 +143,9 @@ float getSavingsB(int hrs, float cost) {
 string getBestB(int hrs) {
 
     string bestPlan;
-    bestPlan = (hrs>0 && hrs<11)? "A " :
-    ((hrs > 10) && (hrs < 35)) ? "B " :
-            (hrs > 34) ? "C " :
-            "Error in getBestB() else.\n";
+    bestPlan = (hrs>0 && hrs<=10) ? "A " :
+    ((hrs >=11) && (hrs <= 34)) ? "B " :
+            (hrs >=35) ? "C " : "";
     return bestPlan;
 }
 
@@ -165,7 +153,6 @@ string getBestB(int hrs) {
 float pkgB(int hrs) {
 
     float cost;
-    
     if(hrs>0) cost= PLANB;
 
     if (hrs > 30) {
@@ -184,9 +171,9 @@ float pkgB(int hrs) {
 string getBestA(int hrs) {
 
     string bestPlan;
-    bestPlan = ((hrs > 0) && (hrs < 11)) ? "A " :
-            ((hrs > 10) && (hrs < 21)) ? "B " :
-            (hrs > 20) ? "C " :
+    bestPlan = ((hrs > 0) && (hrs <=20)) ? "A " :
+            ((hrs >=21) && (hrs <=32)) ? "B " :
+           (hrs >= 33) ? "C " :
             "Error in getBestA() else.\n";
     return bestPlan;
 }
@@ -195,11 +182,11 @@ string getBestA(int hrs) {
 float getSavingsA(int hrs, float cost) {
 
     float saving;
-    if ((hrs > 0) && (hrs < 11)) {
-        saving = cost - PLANA;
-    } else if ((hrs > 10) && (hrs < 21)) {
-        saving = cost - PLANB;
-    } else if (hrs > 20) {
+    if ((hrs > 0) && (hrs <=20)) {
+        saving = 0;
+    } else if ((hrs >=21) && (hrs <=32)) {
+        saving =cost- PLANB;
+    } else if (hrs >= 33) {
         saving = cost - PLANC;
     } else "Error in getSavingsA() else.\n";
 

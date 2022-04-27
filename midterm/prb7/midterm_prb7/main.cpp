@@ -19,8 +19,12 @@ using namespace std;
 //User Libraries
 
 //Global Constants Only!
+// PROBLEM 4 GLOBALS
+const float PLANA = 16.99;
+const float PLANB = 26.99;
+const float PLANC = 36.99;
 
-//Function Prototypes
+//problem7 Function Prototypes
 void Menu();
 int getN();
 void def(int);
@@ -31,27 +35,31 @@ void problem4();
 void problem5();
 void problem6();
 
-//problem 1 Functions   
-void dsd_evenFwd(int);
-void oddF(int);
-void evenB(int);
-void dsd_oddBk(int);
+// PROBLEM 1 Function Prototypes 
 void oddX(int);
 void evenX(int);
+void dsd_evenFwd(int);
+void dsd_oddBk(int);
+void asd_evenBk(int);
 void asd_OddFwd(int);
-void asd_OddBk(int);
-
-//PROBLEM 2 Prototypes
-void print(int);
 
 //PROBLEM 3 Function Prototypes 
 void convertNums(int, string &); // converts numbers 0-9 for thousands,hundreds, ones place
 void convertTens(int, string &); // converts 10-90
 void specialTens(int, string &); // converts 11-19
 
+// PROBLEM 4 Function Prototypes
+float pkgA(int);
+float pkgB(int);
+float pkgC(int);
+string getBestA(int);
+string getBestB(int);
+string getBestC(int);
+float getSavingsA(int, float);
+float getSavingsB(int, float);
+float getSavingsC(int, float);
 
 //Execution Begins Here!
-
 int main(int argc, char** argv) {
     //Set a Random number seed here.
 
@@ -83,6 +91,8 @@ int main(int argc, char** argv) {
     return 0;
 }
 
+// *****************************************************
+// ****************** FUNCTION DEFITIONS ***************
 void Menu() {
     cout << endl;
     cout << "Type 1 to execute Problem 1" << endl;
@@ -104,171 +114,131 @@ void def(int inN) {
     cout << endl << "Typing " << inN << " exits the program." << endl;
 }
 
-// ***** PROBLEM 1 FUNCTION DEFTIONS  ********
 
+// *****************************************************
+// *************** PROBLEM 1 FUNCTIONs *****************
 void problem1() {
 
-    //Declare all Variables Here
     unsigned short x;
     char shape; //f-> forward b->backward x->cross
 
     //Input or initialize values Here
     cout << "Create a numbered shape that can be sized." << endl;
     cout << "Input an integer number [1,50] and a character [x,b,f]." << endl;
-    cin >> x>>shape;
+    cin >> x >> shape;
 
     //Draw the shape
     unsigned short num;
     num = x % 2;
 
-    if ((shape == 'x') && (num != 0)) {
+    // ***  EVEN ***
+    if (num == 0) {
 
-        oddX(x);
-        //asd_OddFwd(x);
-        //asd_OddBk(x);
+        //   EVEN  /FORWARD/ DESCENDING
+        if ((shape == 'f') || (shape == 'F')) dsd_evenFwd(x);
 
-    }// even number conditional for x
-    else if (num == 0) {
-        dsd_evenFwd(x);
-
-        // odd number conditional for x
+        /*   EVEN  \BACK\   DESCENDING    */
+        else if ((shape == 'b') || (shape == 'B')) asd_evenBk(x);
+        
+        //     X EVEN   7     
+        else if ((shape == 'x') || (shape == 'X')) evenX(x);
+     
+    // ***  ODD ***
     } else if (num != 0) {
-        dsd_oddBk(x);
 
-    } else {
-        cout << "Error in else";
-    }
+        //   ODD  /FORWARD/   DESCENDING
+        if ((shape == 'f') || (shape == 'F')) asd_OddFwd(x);
+           
+        /*   ODD   \BACK\   DESCENDING    */
+        else if ((shape == 'b') || (shape == 'B')) dsd_oddBk(x);
 
-}
+        //    X ODD 1 & 8
+        else if ((shape == 'x') || (shape == 'X')) oddX(x);
 
-void oddX(int x3) {
-    int p, z, h;
+    } else cout << "error in else for num\n"; 
+} // END OF problem1
 
-    // DONT TOUCH
-    int d = 5;
-    int e = 0;
-    for (int j = 1; j <= 5; j++) {
-        //for(int j=1; j<=5;j++){
-        for (int i = 1; i <= x3; i++) {
-            //for(int i=1;i<=x3;i++){
+// ******** problem1 FUNCTIONS *****
+//  ODD X
+void oddX(int x) {
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+            if (a3 == b2) cout << a2;
+            else if (a3 + b2 == x + 1) cout << a3;
+            else cout << " ";
         }
-        // empty space before j    
-        cout << setw(d) << setfill(' ') << j
-                << setw(e) << setfill('*') << ""
-                << endl;
-        d--;
-        e++;
-    }
-    cout << endl;
-
-    // DONT TOUCH
-    int c = 0;
-    for (int a = x3; a >= 1; a--) {
-        for (int b = 1; b <= x3; b++) {
-            //cout<<b;
-        }
-        cout << setw(c) << setfill(' ') << ""
-                << setw(a) << left << setfill(' ') << a
-                << endl;
-        c++;
-    }
-    cout << endl;
-
-
-    // loops for X
-    h = 0;
-    p = 4;
-    z = 1;
-    for (int a = x3; a >= 1; a--) {
-        //p=5;
-        //p--;
-        for (int b = 1; b <= x3; b++) {
-            //cout<<b;
-        }
-        //--p;
-        cout << setw(h) << setfill(' ') << "" << a
-                << setw(p) << z
-                << endl;
-        //cout<<"p = "<<p<<endl;
-        h++;
-        p--;
-        //--p;
-        z++;
-        /*
-            cout <<setw(c)<< setfill(' ') << ""; 
-            cout << setw(4) << left << setfill(' ') << a;
-            cout << setw(1) << setfill('!') << a <<endl;
-         */
-    }
-
-}
-
-// ascending order, x=even and forward slash
-
-void asd_OddFwd(int x1) {
-    int d = 5;
-    int e = 0;
-    for (int j = 1; j <= 5; j++) {
-        for (int i = 1; i <= x1; i++) {
-        }
-
-        cout << setw(d) << setfill(' ') << j
-                << setw(e) << setfill(' ') << "" << endl;
-        d--;
-        e++;
-
+        cout << endl;
     }
 }
-// ascending order, x=even and back slash
-
-void asd_OddBk(int x1) {
-    //cout << "Odd Fwd"<<endl;
-    int d = 0;
-    for (int j = 1; j <= x1; j++) {
-        for (int i = 1; i <= x1; i++) {
+// EVEN X
+void evenX(int x) {
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+            if (a3 == b2) cout << a3;
+            else if (a3 + b2 == x + 1) cout << a2;
+            else cout << " ";
         }
-        cout << setw(j) << setfill(' ') << j;
-        cout << setw(d) << setfill(' ') << "" << endl;
-        d++;
+        cout << endl;
     }
 }
-// descending order. x=even and forward slash
-
-void dsd_evenFwd(int x1) {
-    //cout << "Even"<<endl;
-    int d = 0;
-    for (int j = x1; j >= 1; j--) {
-        for (int i = 1; i <= x1; i++) {
+// *********************
+//    DESCENDING
+// *********************
+//    ODD  \BACK\  DESCENDING TC2,4,6
+void dsd_oddBk(int x) {
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+            if (a3 == b2) cout << a2;
+            else cout << " ";
         }
-        cout << setw(j) << setfill(' ') << j;
-        cout << setw(d) << setfill(' ') << "" << endl;
-        d++;
+        cout << endl;
     }
 }
-// descending order, x=odd and back slash
-
-void dsd_oddBk(int x2) {
-    //cout << "Odd"<<endl;
-    int c = 0;
-    for (int a = x2; a >= 1; a--) {
-        for (int b = 1; b <= x2; b++) {
-            //cout<<b;
+//    EVEN  /FORWARD/   DESCENDING  TC1,3
+void dsd_evenFwd(int x) {
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+            
+            if (a3 + b2 == x + 1) cout << a2;
+            else cout << " ";
         }
-        cout << setw(c) << setfill(' ') << "";
-        cout << setw(a) << left << setfill(' ') << a << endl;
-        c++;
+        cout << endl;
     }
-}// *****  END OF PROBLEM 1 FUNCTION DEFTIONS  ********
+}
+// *********************
+//      ASCENDING
+// *********************
+//    EVEN  \BACK\  ASCENDING tc 5
+void asd_evenBk(int x){
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+            if (a3 == b2) cout << a3;
+            else cout << " ";
+        }
+        cout << endl;
+    }
+}
+//    ODD   /FORWARD/   ASCENDING TC5
+void asd_OddFwd(int x) {
+  for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+            if (a3 + b2 == x + 1) cout << a3;
+            else cout << " ";
+        }
+        cout << endl;
+    }
+}
+// *****  END OF PROBLEM 1 FUNCTION DEFTIONS  ********
 
 
-// ******* START OF PROBLEM 2 FUNCTION DEFITIONS *******
 
+// *****************************************************
+// ************* START OF PROBLEM 2 FUNCTIONS **********
 void problem2() {
-    //Declare all Variables Here
+  
     const char nRows = 4;
     int num;
     char input[4];
-
 
     //Input or initialize values Here
     cout << "Create a histogram chart." << endl;
@@ -278,158 +248,46 @@ void problem2() {
     for (int row = 0; row < nRows; row++) {
 
         num = input[row];
-        //cout << "num b4 ifs "<<num << " "<<endl;
-
+       
         // conditional for special chars, A-Z or a-z or a Period in ASCII
         if ((num >= 33 && num <= 47) || (num >= 58 && num <= 126)) {
 
             cout << static_cast<char> (num) << " ?" << endl;
 
-            // conditional for a blank space    
+          // conditional for a blank space    
         } else if (num == 32) {
             cout << "  ?" << endl;
 
-        }// conditional for 0-9 in ASCII
-        else if ((num >= 48) && (num <= 57)) {
+          // conditional for 0-9 in ASCII
+        } else if ((num >= 48) && (num <= 57)) {
 
             int zero = 48;
             num -= zero; // https://www.softwaretestinghelp.com/cpp-character-conversion-functions/
             int digit = num;
-            //cout << n2 << " ";
-
-            //print(n2);
-            switch (digit) {
-                case 0:
-                {
-                    cout << digit << "" << endl;
-                    break;
-                }
-                case 1:
-                {
-                    cout << digit << " *" << endl;
-                    break;
-                }
-                case 2:
-                {
-                    cout << digit << " **" << endl;
-                    break;
-                }
-                case 3:
-                {
-                    cout << digit << "***" << endl;
-                    break;
-                }
-                case 4:
-                {
-                    cout << digit << "****" << endl;
-                    break;
-                }
-                case 5:
-                {
-                    cout << digit << "*****" << endl;
-                    break;
-                }
-                case 6:
-                {
-                    cout << digit << "******" << endl;
-                    break;
-                }
-                case 7:
-                {
-                    cout << digit << "*******" << endl;
-                    break;
-                }
-                case 8:
-                {
-                    cout << digit << "********" << endl;
-                    break;
-                }
-                case 9:
-                {
-                    cout << digit << "*********" << endl;
-                    break;
-                }
-                default:
-                {
-                    cout << "You landed in switch default.\n";
-                }
-            } // closes switch()
-
-
+            cout << digit << " ";
+           
+            for(int i=1;i<=digit;i++) {
+                cout << "*";
+                
+            }
+            cout <<endl;
             // catches any errors
         } else {
-            cout << "Error. in else." << endl;
-
+            cout << "Error in else." << endl;
         }
     }
+    cout << "MSG 1  PROBLEM 2 BUG NOT DISPLAYING MSG 2...\n";
     cout << endl;
+    cout << "MSG 2 PROBLEM 2 SHOULD END & EXIT HERE....\n";
 }
-
-void print(int digit) {
-
-    switch (digit) {
-        case 0:
-        {
-            cout << "" << endl;
-            break;
-        }
-        case 1:
-        {
-            cout << digit << " *" << endl;
-            break;
-        }
-        case 2:
-        {
-            cout << digit << " **" << endl;
-            break;
-        }
-        case 3:
-        {
-            cout << "***" << endl;
-            break;
-        }
-        case 4:
-        {
-            cout << "****" << endl;
-            break;
-        }
-        case 5:
-        {
-            cout << "*****" << endl;
-            break;
-        }
-        case 6:
-        {
-            cout << "******" << endl;
-            break;
-        }
-        case 7:
-        {
-            cout << "*******" << endl;
-            break;
-        }
-        case 8:
-        {
-            cout << "********" << endl;
-            break;
-        }
-        case 9:
-        {
-            cout << "*********" << endl;
-            break;
-        }
-        default:
-        {
-            cout << "You landed in switch default.\n";
-        }
-    } // closes switch()
-}// ******* END OF PROBLEM 2 FUNCTION DEFITIONS *******
+// ******* END OF PROBLEM 2 FUNCTION DEFITIONS *******
 
 
-// ******* START OF PROBLEM 3 FUNCTION DEFITIONS *******
 
+// *****************************************************
+// ************ START OF PROBLEM 3 FUNCTIONS ***********
 void problem3() {
-    //Declare all Variables Here
+   
     const string thousnd = "Thousand "; // concat to dollar string
     const string hundred = "Hundred "; // concat to dollar string
     const string cents = "and no/100's Dollars"; // concat to end of dollar string
@@ -484,185 +342,279 @@ void problem3() {
     cout << dollars << endl;
 }
 // function converts numbers between 11-19 in tens place
-
 void specialTens(int digit, string &check) {
     switch (digit) {
-        case 19:
-        {
+        case 19:{
             check += "Nineteen ";
             break;
-        }
-        case 18:
-        {
+        } case 18: {
             check += "Eighteen ";
             break;
-        }
-        case 17:
-        {
+        } case 17: {
             check += "Seventeen ";
             break;
-        }
-        case 16:
-        {
+        } case 16: {
             check += "Sixteen ";
             break;
-        }
-        case 15:
-        {
+        } case 15: {
             check += "Fifteen ";
             break;
-        }
-        case 14:
-        {
+        } case 14: {
             check += "Fourteen ";
             break;
-        }
-        case 13:
-        {
+        } case 13: {
             check += "Thirteen ";
             break;
-        }
-        case 12:
-        {
+        } case 12: {
             check += "Twelve ";
             break;
-        }
-        case 11:
-        {
+        } case 11: {
             check += "Eleven ";
             break;
-        }
-        default: cout << "Error in tens switch default.\n";
+        } default: cout << "Error in tens switch default.\n";
     }
 }
 // function converts numbers [10,90] and zero in tens place
-
 void convertTens(int digit, string &check) {
     switch (digit) {
-        case 9:
-        {
+        case 9: {
             check += "Ninety ";
             break;
-        }
-        case 8:
-        {
+        } case 8: {
             check += "Eighty ";
             break;
-        }
-        case 7:
-        {
+        } case 7: {
             check += "Seventy ";
             break;
-        }
-        case 6:
-        {
+        } case 6: {
             check += "Sixty ";
             break;
-        }
-        case 5:
-        {
+        } case 5: {
             check += "Fifty ";
             break;
-        }
-        case 4:
-        {
+        } case 4: {
             check += "Forty ";
             break;
-        }
-        case 3:
-        {
+        } case 3: {
             check += "Thirty ";
             break;
-        }
-        case 2:
-        {
+        }  case 2: {
             check += "Twenty ";
             break;
-        }
-        case 1:
-        {
+        } case 1: {
             check += "Ten ";
             break;
-        }
-        case 0:
-        {
+        } case 0: {
             break;
-        }
-        default: cout << "Error in tens switch default.\n";
+        } default: cout << "Error in tens switch default.\n";
     }
 }
 // function for single digits [0,9] for the thousands, hundreds & ones place in check
-
 void convertNums(int digit, string &check) {
     switch (digit) {
-        case 9:
-        {
+        case 9: {
             check += "Nine ";
             break;
-        }
-        case 8:
-        {
+        } case 8: {
             check += "Eight ";
             break;
-        }
-        case 7:
-        {
+        } case 7: {
             check += "Seven ";
             break;
-        }
-        case 6:
-        {
+        } case 6: {
             check += "Six ";
             break;
-        }
-        case 5:
-        {
+        } case 5: {
             check += "Five ";
             break;
-        }
-        case 4:
-        {
+        } case 4: {
             check += "Four ";
             break;
-        }
-        case 3:
-        {
+        } case 3: {
             check += "Three ";
             break;
-        }
-        case 2:
-        {
+        } case 2: {
             check += "Two ";
             break;
-        }
-        case 1:
-        {
+        } case 1: {
             check += "One ";
             break;
-        }
-        case 0:
-        {
+        } case 0: {
             break;
-        }
-        default: cout << "Error in switch default.\n";
+        } default: cout << "Error in switch default.\n";
     }
 } // ******* END OF PROBLEM 3 FUNCTION DEFITIONS *******
 
 
+// *****************************************************
 // ******* START OF PROBLEM 4 FUNCTION DEFITIONS *******
-
 void problem4() {
 
+    const string A = "A ";
+    const string B = "B ";
+    const string C = "C ";
+
+    char package;
+    unsigned short hours;
+    float bill = 0.0f,
+            save = 0.0f;
+    string cheapst = "";
+    //bill_A += PLANA;
+
+    //Input or initialize values Here
+    cout << "ISP charges for service delivered." << endl;
+    cout << "Input package A,B,C then hours used for the month" << endl;
+    cin >> package>>hours;
+
+    //Basic Charges
+    switch (package) {
+        case 'a':
+        case 'A':
+        {
+            bill = pkgA(hours);
+            cheapst = getBestA(hours);
+            save = getSavingsA(hours, bill);
+            break;
+        }
+        case 'b':
+        case 'B':
+        {
+            bill = pkgB(hours);
+            cheapst = getBestB(hours);
+            save = getSavingsB(hours, bill);
+            break;
+        }
+        case 'c':
+        case 'C':
+        {
+            bill=pkgC(hours);
+            cheapst=getBestC(hours);
+            save=getSavingsC(hours, bill);
+            break;
+        }
+        default: cout << "Error in switch package default.\n";
+    }
+
+    //Output the Charge
+    cout << fixed << showpoint << setprecision(2);
+    cout << setw(1) << "$" << setw(6) << left << bill;
+
+    //Output the cheapest package and the savings
+    cout << setw(2) <<cheapst << setw(1) << "$" << save << endl;
+}
+//********** PROBLEM 4 FUNCTIONS  *************
+//****************** PACKAGE C ****************
+string getBestC(int hrs) {
+
+    string bestPlan;
+    bestPlan = (hrs>0 && hrs<=10)? "A " :
+    ((hrs >=11) && (hrs <=34)) ? "B " :
+            (hrs >=35) ? "C " : "";
+    return bestPlan;
 }
 
+float getSavingsC(int hrs, float cost) {
+
+    float saving;
+    if(hrs>0 && hrs<=10) saving=PLANC-PLANA;
+    else if ((hrs >=11) && (hrs <=34)) saving = PLANC-PLANB;
+    else if (hrs > 34) saving = 0;
+    return saving;
+}
+
+// 
+float pkgC(int hrs) {
+    
+    float cost;
+    if(hrs>=0) cost= PLANC;
+    return cost;
+}
+
+// ***********************************
+//************ PACKAGE B *************
+// 
+float getSavingsB(int hrs, float cost) {
+
+    float saving;
+    if(hrs>0 && hrs<=10) saving=PLANB-PLANA;
+    else if ((hrs >=11) && (hrs <= 34)) saving = 0;
+    else if (hrs >=35) saving = cost-PLANC;
+    return saving;
+}
+
+// 
+string getBestB(int hrs) {
+
+    string bestPlan;
+    bestPlan = (hrs>0 && hrs<=10) ? "A " :
+    ((hrs >=11) && (hrs <= 34)) ? "B " :
+            (hrs >=35) ? "C " : "";
+    return bestPlan;
+}
+
+// 
+float pkgB(int hrs) {
+
+    float cost;
+    if(hrs>0) cost= PLANB;
+
+    if (hrs > 30) {
+        cost += (10 * .74);
+        cost += ((hrs - 30)*.64);
+
+    } else if (hrs > 20 && hrs < 31) cost += ((hrs - 20)*.74);
+    else return cost;
+
+    return cost;
+}
+// ****************************
+// ******** PACKAGE A  ********
+string getBestA(int hrs) {
+
+    string bestPlan;
+    bestPlan = ((hrs > 0) && (hrs <=20)) ? "A " :
+            ((hrs >=21) && (hrs <=32)) ? "B " :
+           (hrs >= 33) ? "C " :
+            "Error in getBestA() else.\n";
+    return bestPlan;
+}
+
+float getSavingsA(int hrs, float cost) {
+
+    float saving;
+    if ((hrs > 0) && (hrs <=20)) {
+        saving = 0;
+    } else if ((hrs >=21) && (hrs <=32)) {
+        saving =cost- PLANB;
+    } else if (hrs >= 33) {
+        saving = cost - PLANC;
+    } else "Error in getSavingsA() else.\n";
+
+    return saving;
+}
+
+float pkgA(int hrs) {
+
+    float cost;
+    if(hrs>0) cost = PLANA;
+
+    if (hrs > 20) {
+        cost += (10 * .95);
+        cost += ((hrs - 20)*.85);
+
+    } else if (hrs > 10 && hrs < 21) cost += ((hrs - 10)*.95);
+    else return cost;
+
+    return cost;
+}
 // ******* END OF PROBLEM 4 FUNCTION DEFITIONS *******
 
 
-// ******* START OF PROBLEM 5 FUNCTION DEFITIONS *******
+// *****************************************************
+// ********* START OF PROBLEM 5 FUNCTIONS **************
 
 void problem5() {
 
-    //Declare all Variables Here
     const int HRS20 = 20;
     const int HRS40 = 40;
     const float RATE1_5 = 1.5;
@@ -714,8 +666,8 @@ void problem5() {
 } // ******* END OF PROBLEM 5 FUNCTION DEFITIONS *******
 
 
-// ******* START OF PROBLEM 6 FUNCTION DEFITIONS *******
-
+// *****************************************************
+// ************ START OF PROBLEM 6 FUNCTIONS ***********
 void problem6() {
 
 }

@@ -1,14 +1,14 @@
 /* 
  * File:   main.cpp
  * Author: Danielle Fernandez
- * Created on: April 22, 2022 10:42 PM
- * Purpose:  Cross one-side or the other 
- * Version 3
+ * Created on: April 22, 2022 9:07 PM
+ * Purpose:  Cross one-side or the other
  */
 
 //System Libraries Here
 #include <iostream>
 #include <iomanip>  // setw()
+
 using namespace std;
 
 //User Libraries Here
@@ -16,171 +16,138 @@ using namespace std;
 //Global Constants Only, No Global Variables
 //Like PI, e, Gravity, or conversions
 
-
 //Function Prototypes Here
-void dsd_evenFwd(int);
-void oddF(int);
-void evenB(int);
-void dsd_oddBk(int);
 void oddX(int);
 void evenX(int);
-
+void dsd_evenFwd(int);
+void dsd_oddBk(int);
+void asd_evenBk(int);
 void asd_OddFwd(int);
-void asd_OddBk(int);
+
 //Program Execution Begins Here
+
 int main(int argc, char** argv) {
     //Declare all Variables Here
     unsigned short x;
-    char shape;       //f-> forward b->backward x->cross
-    
+    char shape; //f-> forward b->backward x->cross
+
     //Input or initialize values Here
-    cout<<"Create a numbered shape that can be sized."<<endl;
-    cout<<"Input an integer number [1,50] and a character [x,b,f]."<<endl;
-    cin>>x>>shape;
-    
+    cout << "Create a numbered shape that can be sized." << endl;
+    cout << "Input an integer number [1,50] and a character [x,b,f]." << endl;
+    cin >> x >> shape;
+
     //Draw the shape
     unsigned short num;
-    num=x%2;
-    
-    if((shape=='x') && (num!=0)){
+    num = x % 2;
+
+
+    // ***  EVEN ***
+    if (num == 0) {
+
+        //   EVEN  /FORWARD/ DESCENDING
+        if ((shape == 'f') || (shape == 'F')) dsd_evenFwd(x);
+
+            /*   EVEN  \BACK\   DESCENDING    */
+        else if ((shape == 'b') || (shape == 'B')) asd_evenBk(x);
         
-        oddX(x);
-        //asd_OddFwd(x);
-       //asd_OddBk(x);
-        
-    }// even number conditional for x
-    else if(num==0){
-        dsd_evenFwd(x);
-        
-    // odd number conditional for x
-    } else if(num !=0) {
-       dsd_oddBk(x);
-        
-    } else {
-        cout <<"Error in else";
-    }
+        //     X EVEN   7     
+        else if ((shape == 'x') || (shape == 'X')) evenX(x);
+     
+    // ***  ODD ***
+    } else if (num != 0) {
+
+        //   ODD  /FORWARD/   DESCENDING
+        if ((shape == 'f') || (shape == 'F')) asd_OddFwd(x);
+           
+        /*   ODD   \BACK\   DESCENDING    */
+        else if ((shape == 'b') || (shape == 'B')) dsd_oddBk(x);
+
+        //    X ODD 1 & 8
+        else if ((shape == 'x') || (shape == 'X')) oddX(x);
+
+    } else cout << "error in else for num\n"; 
 
     //Exit
     return 0;
 }
 // *********** FUNCTION DEFITIONS ****************
 
-// WORKING ON THIS ONE!
-void oddX(int x3){
-    int p,z,h;
-     
-    // DONT TOUCH
-     int d=5;
-       int e=0;
-        for(int j=1; j<=5;j++){
-        //for(int j=1; j<=5;j++){
-            for(int i=1;i<=x3;i++){
-            //for(int i=1;i<=x3;i++){
-            }
-        // empty space before j    
-         cout <<setw(d) << setfill(' ') << j 
-              << setw(e) << setfill('*') << ""  
-              << endl;
-       d--;
-       e++;
+
+void oddX(int x) {
+
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+
+            if (a3 == b2) cout << a2;
+            else if (a3 + b2 == x + 1) cout << a3;
+            else cout << " ";
         }
-        cout<<endl;
-        
-    // DONT TOUCH
-    int c=0;
-    for(int a=x3; a>=1;a--){
-        for(int b=1; b<=x3;b++){
-            //cout<<b;
-        }
-    cout <<setw(c) << setfill(' ') << "" 
-         << setw(a) << left << setfill(' ') << a 
-         <<endl;
-    c++;
+        cout << endl;
     }
-    cout <<endl;
-    
-    
-     // loops for X
-     h=0;
-     p=4;
-     z=1;
-    for(int a=x3; a>=1;a--){
-         //p=5;
-          //p--;
-        for(int b=1; b<=x3;b++){
-            //cout<<b;
-        }
-        //--p;
-    cout << setw(h) << setfill(' ') << "" << a 
-         << setw(p) << z
-         << endl;
-         //cout<<"p = "<<p<<endl;
-         h++;
-         p--;
-        //--p;
-         z++;
-/*
-    cout <<setw(c)<< setfill(' ') << ""; 
-    cout << setw(4) << left << setfill(' ') << a;
-    cout << setw(1) << setfill('!') << a <<endl;
-*/
-    }
-    
 }
 
+void evenX(int x) {
 
-// ascending order, x=even and forward slash
-void asd_OddFwd(int x1){
-       int d=5;
-       int e=0;
-        for(int j=1; j<=5;j++){
-            for(int i=1;i<=x1;i++){
-            }
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+
+            if (a3 == b2) cout << a3;
+            else if (a3 + b2 == x + 1) cout << a2;
+            else cout << " ";
+        }
+        cout << endl;
+    }
+}
+
+// *********************
+//    DESCENDING
+// *********************
+
+//    ODD  \BACK\  DESCENDING TC2,4,6
+void dsd_oddBk(int x) {
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+            if (a3 == b2) cout << a2;
+            else cout << " ";
+        }
+        cout << endl;
+    }
+}
+
+//    EVEN  /FORWARD/   DESCENDING  TC1,3
+void dsd_evenFwd(int x) {
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
             
-         cout <<setw(d)<< setfill(' ') << j 
-         << setw(e) << setfill(' ') << ""  << endl;
-       d--;
-       e++;
-        
+            if (a3 + b2 == x + 1) cout << a2;
+            else cout << " ";
         }
+        cout << endl;
+    }
 }
 
-// ascending order, x=even and back slash
-void asd_OddBk(int x1){
-    //cout << "Odd Fwd"<<endl;
-       int d=0;
-        for(int j=1; j<=x1;j++){
-            for(int i=1;i<=x1;i++){
-            }
-        cout << setw(j) << setfill(' ') << j;
-        cout <<setw(d)<< setfill(' ') << "" << endl;
-        d++;
+// *********************
+//    ASCENDING
+// *********************
+
+//    EVEN  \BACK\  ASCENDING tc 5
+void asd_evenBk(int x){
+    for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+            if (a3 == b2) cout << a3;
+            else cout << " ";
         }
+        cout << endl;
+    }
 }
 
-// descending order. x=even and forward slash
-void dsd_evenFwd(int x1){
-    //cout << "Even"<<endl;
-       int d=0;
-        for(int j=x1; j>=1;j--){
-            for(int i=1;i<=x1;i++){
-            }
-        cout << setw(j) << setfill(' ') << j;
-        cout <<setw(d)<< setfill(' ') << "" << endl;
-        d++;
+//    ODD   /FORWARD/   ASCENDING TC5
+void asd_OddFwd(int x) {
+  for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
+        for (int b2 = 1; b2 <= x; b2++) {
+            if (a3 + b2 == x + 1) cout << a3;
+            else cout << " ";
         }
-}
-
-// descending order, x=odd and back slash
-void dsd_oddBk(int x2){
-     //cout << "Odd"<<endl;
-    int c=0;
-    for(int a=x2; a>=1;a--){
-        for(int b=1; b<=x2;b++){
-            //cout<<b;
-        }
-    cout <<setw(c)<< setfill(' ') << ""; 
-    cout << setw(a) << left << setfill(' ') << a <<endl;
-    c++;
+        cout << endl;
     }
 }

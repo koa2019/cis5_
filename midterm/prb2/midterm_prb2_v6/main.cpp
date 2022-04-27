@@ -4,12 +4,14 @@
  * Created on: April 22, 2022 4:00 PM
  * Purpose:  Histogram v4 - calls print() 
  * expected input 0000, 5225, 87a9, .1Ab
+ * v6 code-e @837pm 4/26
  */
 
 //System Libraries Here
 #include <iostream>
 #include <cstring>
 #include <string>
+
 
 using namespace std;
 
@@ -35,30 +37,31 @@ int main(int argc, char** argv) {
     cout << "Input 4 digits as characters." << endl;
     cin >> input;
 
+
     for (int row = 0; row < nRows; row++) {
 
         num = input[row];
         //cout << "num b4 ifs "<<num << " "<<endl;
 
-         // conditional for special chars, A-Z or a-z or a Period in ASCII
+        // conditional for special chars, A-Z or a-z or a Period in ASCII
         if ( (num>=33 && num<=47) || (num>=58 && num<=126) ) {
             
             cout << static_cast<char> (num) << " ?" << endl;
 
             // conditional for a blank space    
-        } else if (num == 32) {
+        } else if (num==32) {
             cout << "  ?" << endl;
 
         }// conditional for 0-9 in ASCII
-        else if (num <= 57 && num >= 48) {
+        else if ((num>=48) && (num<=57)) {
 
             int zero = 48;
             num -= zero; // https://www.softwaretestinghelp.com/cpp-character-conversion-functions/
             int n2 = num;
             cout << n2 << " ";
 
-            print(n2);            
-               
+            print(n2);
+           
             // catches any errors
         } else cout << "Error. in else." << endl;
     }
