@@ -3,12 +3,13 @@
  * Author: Danielle Fernandez
  * Created on: April 22, 2022 9:07 PM
  * Purpose:  Cross one-side or the other
+ *  v5
  */
 
 //System Libraries Here
 #include <iostream>
 #include <iomanip>  // setw()
-
+#include <cstring>
 using namespace std;
 
 //User Libraries Here
@@ -130,7 +131,7 @@ void dsd_evenFwd(int x) {
 //    ASCENDING
 // *********************
 
-//    EVEN  \BACK\  ASCENDING tc 5
+//    EVEN  \BACK\  ASCENDING tc 4 OR 5
 void asd_evenBk(int x){
     for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
         for (int b2 = 1; b2 <= x; b2++) {
@@ -141,7 +142,7 @@ void asd_evenBk(int x){
     }
 }
 
-//    ODD   /FORWARD/   ASCENDING TC5
+//    ODD   /FORWARD/     TC4 OR 5
 void asd_OddFwd(int x) {
   for (int a2 = x, a3 = 1; a2 >= 1; a2--, a3++) {
         for (int b2 = 1; b2 <= x; b2++) {
