@@ -1,7 +1,7 @@
 /* 
  * File:   main.cpp
  * Author: Dr. Mark E. Lehr
- * Purpose:  e^x Sequence
+ * Purpose:  e^x Sequence v1
  */
 
 //System Libraries Here

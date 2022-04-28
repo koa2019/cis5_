@@ -1,7 +1,7 @@
 /* 
  * File:   main.cpp
  * Author: Dr. Mark E. Lehr
- * Purpose:  Factorial
+ * Purpose:  Factorial v1
  */
 
 //System Libraries Here
@@ -14,7 +14,6 @@ using namespace std;
 //Like PI, e, Gravity, or conversions
 
 //Function Prototypes Here
-int fctrl(int);
 
 //Program Execution Begins Here
 int main(int argc, char** argv) {
@@ -22,21 +21,17 @@ int main(int argc, char** argv) {
     int n,fact;
     
     //Input or initialize values Here
-    n=2;
- 
+    n=5;
+    fact=1;
+    
+    //Process/Calculations Here
+    for(int i=1;i<=n;i++){
+        fact*=i;
+    }
+    
     //Output the results
-    cout<<n<<"!="<<fctrl(n)<<endl;
+    cout<<n<<"!="<<fact<<endl;
  
     //Exit
     return 0;
-}
-
-int fctrl(int n){
-    //Declare and Initialize Product
-    int prod=1;
-    //Process/Calculations Here
-    for(int i=1;i<=n;i++){
-        prod*=i;
-    }
-    return prod;
 }
