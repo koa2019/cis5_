@@ -1,8 +1,0 @@
-test case 1 & 3, x is even.
-
-test case 2 & 6, x is odd.
-
-TC 5 - EVEN BACK
-
-TC 1, 7, 8 X
-4
