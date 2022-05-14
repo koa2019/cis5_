@@ -172,10 +172,10 @@ int main(int argc, char** argv) {
                 }
             }
 
+            round++;
             // if both players guess wrong, then increment round by 1
             // and display message to tell them to continue guessing 
             if((!p1_crrt) && (!p2_crrt)){
-                round++;
                 cout << endl << "You Both Missed. Try Again...\n\n";
             }
         }// ends while()
