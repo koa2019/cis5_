@@ -1,0 +1,110 @@
+/* 
+ * File:   main.cpp
+ * Author: Danielle Fernandez
+ * Created: May 5, 2022 @ 12:01  PM 
+ * Purpose: Dice Table Sum v2 uses double array
+ * prints table in main()
+ */
+
+//System Libraries
+#include <iostream>  //Input/Output Library
+#include <iomanip>   //Format Library
+using namespace std;
+
+//User Libraries
+
+//Global Constants, no Global Variables are allowed
+//Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
+const int COLS=6;
+
+//Function Prototypes
+void dsplyIntro();
+void printColZero(int);
+void fillTbl(int [7][7],int); // mine
+
+//void fillTbl(int [][COLS],int);     // LEHR
+//void prntTbl(const int [][COLS],int);   //LEHR
+
+//Execution Begins Here!
+int main(int argc, char** argv) {
+    
+    //Declare Variables
+    const int ROWS=6;
+    int tablSum[ROWS][COLS];
+    int sum[7][7];     
+      
+    dsplyIntro();
+    
+    //Initialize or input i.e. set variable values
+    //fillTbl(tablSum,ROWS);  // LEHR
+    fillTbl(sum,ROWS);
+   
+    // print table sums    
+    for(int i=1; i<ROWS+1; i++){
+        for(int j=0; j<COLS+1; j++){
+            
+             if(j==0) printColZero(ROWS,COLS, i);
+             else {
+                cout << setw(4) << sum[i][j];
+                //cout << " " << i << "+" << j << "= " << sum[i][j];
+            }
+        }
+        cout << endl;
+    }
+   
+    //Display the outputs
+    //prntTbl(tablSum,ROWS);    // LEHR
+  
+    
+    //Exit stage right or left!
+    return 0;
+}
+
+//  *********** FUNCTION DEFINITIONS ************
+void fillTbl(int tablSum[7][7], int rows){
+
+    //cout << "tablSum " << tablSum[0][0] << endl;
+    
+    for(int i=1; i<rows+1; i++){
+        for(int j=0; j<COLS+1; j++){
+            
+            // prints sum of row+col
+            tablSum[i][j]=i+j;
+            //cout << setw(4) << tablSum[i][j];
+            //cout << " [" <<i<<"]+[" << j << "]= " << tablSum[i][j];
+        }
+        //cout << endl;
+    }
+}
+
+
+// for ROWS 1 thru 6, prints COL[0] 
+void printColZero(int i){
+          
+    switch(i){
+        case 1: {
+            cout << setw(4) << i << setw(2) << "|";
+            break;
+        } case 2: {
+            cout << setw(1) << "R" << setw(3) << i << setw(2) << "|" ;
+            break;
+        } case 3: {
+            cout << setw(1) << "O" << setw(3) << i << setw(2) << "|" ;
+            break;
+        } case 4: {
+            cout << setw(1) << "W" << setw(3) << i << setw(2) << "|" ;
+            break;
+        } case 5: {
+            cout << setw(1) << "S" << setw(3) << i << setw(2) << "|" ;
+            break;
+        } default: cout << setw(4) << i << setw(2) << "|" ;
+    }
+}
+
+// displays programs introduction
+void dsplyIntro(){
+    cout << "Think of this as the Sum of Dice Table\n"
+         << setw(11) << setfill(' ') << " " << setw(14) << right << "C o l u m n s\n"
+         << setw(6) << "|" << "   1   2   3   4   5   6" << endl
+         << "----------------------------------" << endl;
+}
