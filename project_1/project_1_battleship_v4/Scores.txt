@@ -1,5 +1,5 @@
 
-Averages for 7 games 
-Player 1 won ceil(28.57)% = 29.00
-Player 2 won ceil(71.43)% = 72.00
-Avg # of rounds to win: ceil(7.57) = 8.00
+Averages for 2 games 
+Player 1 won ceil(50.00)% = 50.00
+Player 2 won ceil(50.00)% = 50.00
+Avg # of rounds to win: ceil(10.00) = 10.00
