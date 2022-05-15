@@ -1,5 +1,9 @@
+Player 1 wins: 3
+Player 2 wins: 6
+9 of 9 max games were played.
+Total # of rounds played: 63
 
-Averages for 2 games 
-Player 1 won ceil(50.00)% = 50.00
-Player 2 won ceil(50.00)% = 50.00
-Avg # of rounds to win: ceil(10.00) = 10.00
+Averages for 9 games
+Player 1 won ceil(33.33)% = 34.00
+Player 2 won ceil(66.67)% = 67.00
+Avg # of rounds to win: ceil(7.00) = 7.00

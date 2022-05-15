@@ -23,6 +23,7 @@ using namespace std;
 // Physics/Chemistry/Math/Conversions
 
 // Function prototypes
+//void banner(string);
 
 // Program execution begins here
 
@@ -46,7 +47,6 @@ int main(int argc, char** argv) {
                  p2_crrt; // player 2 correct
     char         ans; // answer  
     int          maxGmes = 0, // number of games
-                 nGmsLft,     // number of games left       
                  round = 1, // round
                  p1Guess, // player 1 guess
                  p2Guess, // player 2 guess
@@ -54,11 +54,11 @@ int main(int argc, char** argv) {
                  p2Ship1, // player 2 ship number 1
                  p1Win = 0, // number of wins player 1 has
                  p2Win = 0, // number of wins player 2 has
-                 ttlGmes = 0,   // sum of both players number of wins
-                 ttlRnds = 0;   // sum of total rounds played
+                 ttlGmes = 0,
+                 ttlRnds = 0;
     float        avg1, // average number of wins for player 1
                  avg2, // average number of wins for player 2
-                 avgRnds;   // average rounds it takes to win
+                 avgRnds;
     string       gussMsg = "\nGuess a number between 1 and ";
 
     // open an existing file that holds max number of games a user can play
@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
     
     // read in maximum number of games that can be played from file
     inFile >> maxGmes;
-    nGmsLft = maxGmes;  // set numberOfGamesLeft to equal maxGames
+    int nGmsLft = maxGmes;  // set numberOfGamesLeft to equal maxGames
     
     do { // game starts here
         
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
                     cout << setw(21) << "BATTLESHIP" << endl;
                     break;
                 }
-                default: cout << "Error in game banner.\n";
+                default: cout << "Error in banner().\n";
             }
         }
 
@@ -184,7 +184,7 @@ int main(int argc, char** argv) {
         for(int k=0; k<=2; k++){
             ((k==0)||(k==2)) ? cout << "********************************\n"
                     : (k==1) ? cout << setw(21) << "SCOREBOARD" << endl
-                    : cout << "Error in scoreboard banner.\n";
+                    : cout << "Error in banner().\n";
         }
         
         cout << setw(4) << " " << P1 << setw(4) << "vs" << setw(3) << " " 
@@ -204,7 +204,7 @@ int main(int argc, char** argv) {
         if(ttlGmes<maxGmes){
 
             cout << "\nTotal # Games Played = " << ttlGmes << endl;
-            cout << nGmsLft << " of " << maxGmes << " max games left.\n";
+            cout << nGmsLft << " of " << maxGmes << " max games allowed.\n";
             cout << "Play again? ";
             cin >> ans;
 
@@ -219,7 +219,6 @@ int main(int argc, char** argv) {
                 cout << "\nThanks for playing!\n";               
                 cout << fixed << showpoint << setprecision(2); 
                 cout << "\nAverages for " << ttlGmes << " games \n"
-                     << "Total # of rounds played: " << ttlRnds << endl
                      << "Player 1 won ceil(" << avg1 << ")% = " 
                      << ceil(avg1) << endl
                      << "Player 2 won ceil(" << avg2 << ")% = " 
@@ -232,7 +231,6 @@ int main(int argc, char** argv) {
             cout << "Max number of games has been reached." << endl;
             cout << fixed << showpoint << setprecision(2);           
             cout << "\nAverages for " << ttlGmes << " games \n"
-                 << "Total # of rounds played: " << ttlRnds << endl
                  << "Player 1 won ceil(" << avg1 << ")% = " 
                  << ceil(avg1) << endl
                  << "Player 2 won ceil(" << avg2 << ")% = " 
@@ -248,18 +246,14 @@ int main(int argc, char** argv) {
       // ans does not equal y or Y
     } while((ans=='y')||(ans=='Y'));   
 
-    // write scores and averages to file
-    outFile << fixed << showpoint << setprecision(2);
-    outFile << "Player 1 wins: " << p1Win << endl
-            << "Player 2 wins: " << p2Win << endl
-            << ttlGmes << " of " << maxGmes << " max games were played.\n"    
-            << "Total # of rounds played: " << ttlRnds << endl 
-            << "\nAverages for " << ttlGmes << " games" << endl
+    // write scores to file
+    outFile << fixed << showpoint << setprecision(2);  
+    outFile << "\nAverages for " << ttlGmes << " games \n"
             << "Player 1 won ceil(" << avg1 << ")% = " 
             << ceil(avg1) << endl
             << "Player 2 won ceil(" << avg2 << ")% = " 
-            << ceil(avg2) << endl
-            << "Avg # of rounds to win: ceil(" << avgRnds << ") = "
+            << ceil(avg2) << endl;
+    outFile << "Avg # of rounds to win: ceil(" << avgRnds << ") = "
             << ceil(avgRnds) << endl; 
         
     // close file being read in
