@@ -1,0 +1,11 @@
+ /*
+            // loop checks if the user's input is an integer
+           // https://stackoverflow.com/questions/18728754/checking-cin-input-stream-produces-an-integer
+           while (cin.fail()){
+       
+               cout << "\nError. Please enter a whole number. ";
+               cin.clear();
+               cin.ignore(256,'\n');
+               cin >> nPen;
+     }
+     */ 
