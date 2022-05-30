@@ -18,8 +18,8 @@ using namespace std;
 
 //Global Constants, no Global Variables are allowed
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
-const ifstream  inFile, // variable to read in file being read in that already exists
-              inFile2;
+//const ifstream  inFile, // variable to read in file being read in that already exists
+                //inFile2;
 //Function Prototypes
 void print(const string &);
 void read(const char [], string &);

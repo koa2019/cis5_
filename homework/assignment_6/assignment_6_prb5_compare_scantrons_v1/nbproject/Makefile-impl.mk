@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=assignment_6_prb5_compare_scantrons
+PROJECTNAME=assignment_6_prb5_compare_scantrons_v1
 
 # Active Configuration
 DEFAULTCONF=Debug

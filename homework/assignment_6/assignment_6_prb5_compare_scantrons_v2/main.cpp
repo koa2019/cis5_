@@ -4,7 +4,7 @@
  * Created on: 05/16/22 @ 10:42 AM 
  * Purpose: Compare the answer sheet to the key
  *          and grade
- * v2: added print() and displayed all 3 arrays with it
+ * v3: latest from code-e.org 5/19/22 @9:42 AM 
  */
 
 //System Libraries
@@ -19,21 +19,15 @@ using namespace std;
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
 
 //Function Prototypes
-void print(const string &); // LEHR's
-void print(const char [], int); 
-
-void read(const char [], string &);
-
-int compare(const string &, const string &, string &); // LEHR's
-int compare(const char[], const char[], char[], int);
-
+void print5(const char [], int); 
+int compare5(const char[], const char[], char[], int);
 
 int main(int argc, char** argv) {//Execution Begins Here!
     //Set the random number seed
 
     //Declare Variables
     const int SIZE = 25;    // set it to max size because I don't know how many #s in file
-    ifstream  inFile, // variable to read in file being read in that already exists
+    ifstream  inFile,       // variable to read in file being read in that already exists
               inFile2;
    
     string    key,
@@ -65,15 +59,15 @@ int main(int argc, char** argv) {//Execution Begins Here!
   
     //Score the exam
     //pRight=compare(key,answers,score);
-    pRight=compare(fileKey, fileAns, scores, count);
+    pRight=compare5(fileKey, fileAns, scores, count);
        
     //Display the outputs
     // cout<<"Key     "; print(key);
-    cout<<"Key     "; print(fileKey,count);
+    //cout<<"Key     "; print(fileKey,count);
     // cout<<"Answers "; print(answers);
-    cout<<"Answers "; print(fileAns,count);
+    //cout<<"Answers "; print(fileAns,count);
     // cout<<"C/W     "; print(score);
-    cout<<"C/W     "; print(scores, count);
+    cout<<"C/W     "; print5(scores, count);
     // cout<<"Percentage Correct = "<<pRight/score.size()*100<<"%"<<endl;
     cout<<"Percentage Correct = "<<pRight/count*100<<"%"<<endl;
 
@@ -86,15 +80,16 @@ int main(int argc, char** argv) {//Execution Begins Here!
 }
 
 //  *********** FUNCTION DEFINTIONS *************
-void print(const char array[], int count){
+void print5(const char array[], int count){
     
     for(int i=0;i<count;i++){        
         cout << array[i] << " ";
     }
     cout << endl;
 }
+
 // compare 2 arrays and save to a new array
-int compare(const char key[], const char ans[], char scores[], int size){
+int compare5(const char key[], const char ans[], char scores[], int size){
     
     int correct=0;
    
@@ -106,11 +101,4 @@ int compare(const char key[], const char ans[], char scores[], int size){
         } else scores[i]='W'; 
     }
     return correct;
-}
-
-// read in file data
-void read(const char array[], string &str) {
-    
-    //inFile.open(array);
-    
 }
