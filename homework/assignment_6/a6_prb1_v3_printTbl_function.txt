@@ -15,8 +15,8 @@ using namespace std;
 
 //Global Constants, no Global Variables are allowed
 //Math/Physics/Conversions/Higher Dimensions - i.e. PI, e, etc...
-const int COLS=6;
-const int SEVEN=7;
+const int COLS=6;   // LEHR's
+const int SEVEN=7;  // MINE
 
 //Function Prototypes
 void dsplyIntro();
@@ -37,12 +37,14 @@ int main(int argc, char** argv) {
     int tablSum[ROWS][COLS];// LEHR's
     int sum[SEVEN][SEVEN];  // MINE
    
+   //Initialize arrays to zero
     tablSum[0][0]={0};      
     sum[0][0]={0};
     
+    // call function to display intro message to user
     dsplyIntro();
     
-    //Initialize or input i.e. set variable values
+    // get sums of row+col
     fillTbl(sum,ROWS);   
     
     //fillTbl(tablSum,ROWS);  // LEHR   VERSION
@@ -67,15 +69,17 @@ void fillTbl(int tablSum[][COLS], int ROWS){
 }
 
 //  MY VERSION
-void fillTbl(int tablSum[SEVEN][SEVEN], int rows){
+void fillTbl(int sum[SEVEN][SEVEN], int ROWS){
 
-    //cout << "tablSum " << tablSum[0][0] << endl;
+    //cout << "sum " << sum[0][0] << endl;
     
-    for(int i=1; i<rows+1; i++){
+    //
+    for(int i=1; i<ROWS+1; i++){
+       
         for(int j=0; j<COLS+1; j++){
             
             // prints sum of row+col
-            tablSum[i][j]=i+j;
+            sum[i][j]=i+j;
             //cout << setw(4) << tablSum[i][j];
             //cout << " [" <<i<<"]+[" << j << "]= " << tablSum[i][j];
         }
@@ -84,9 +88,9 @@ void fillTbl(int tablSum[SEVEN][SEVEN], int rows){
 }
 
 // MY VERSION
-void prntTbl(int sum[SEVEN][SEVEN],int rows){
+void prntTbl(int sum[SEVEN][SEVEN],int ROWS){
     
-   for(int i=1; i<rows+1; i++){
+   for(int i=1; i<ROWS+1; i++){
         for(int j=0; j<COLS+1; j++){
             
              if(j==0) printColZero(i);
@@ -128,10 +132,15 @@ void printColZero(int i){
     }
 }
 
-// displays programs introduction
+// displays intro message to user
 void dsplyIntro(){
+    int blank=4;
     cout << "Think of this as the Sum of Dice Table\n"
          << setw(11) << setfill(' ') << " " << setw(14) << right << "C o l u m n s\n"
-         << setw(6) << "|" << "   1   2   3   4   5   6" << endl
-         << "----------------------------------" << endl;
+         << setw(blank+2) << "|" ;
+         
+    for(int j=0;j<COLS;j++){
+        cout << setw(blank) << (j+1) << setw(blank) << setfill(' ');
+    }
+    cout << endl << "----------------------------------" << endl;
 }
