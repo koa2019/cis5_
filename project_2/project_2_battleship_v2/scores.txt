@@ -1,0 +1,5 @@
+Player 1 wins: 0
+Player 2 wins: 1
+1 of 5 max games were played.
+Player 1 won ceil(0.00)% = 0.00
+Player 2 won ceil(100.00)% = 100.00
