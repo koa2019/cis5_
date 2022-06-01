@@ -28,6 +28,7 @@ using namespace std;
 void banner(string);      // display game 
 void copyAdd(string [],const int,string[],const int,string);
 void getName(string &);  // get player 1's name using pass by reference
+
 void hitMiss(int,int);  // hit message for correct guess
 void hitMiss(int);      // possible overload () with hitMsg()
 void dblMiss();        // try again message
@@ -37,7 +38,10 @@ string pickP2(string [],int);  // randomly picks a number for player 2
 void print(string []);
 void rBanner(int &, bool);      // display the round number
 void sBanner(string,string,string,int,int);   // display scoreboard banner
+void sortSel(string [], int );      // selection sort
+void scoresMsg( int, int,int);  // displays number of games played and how many are left minus maxGames
 void scoresMsg(int,int,float,float,float);  // displays scores for both players
+void showStatic();
 void sortBub(string [], int);       // sort names
 void swap1(string &, string &);
 void upper(string &); // changes string to all uppercase letters
@@ -68,7 +72,7 @@ int main(int argc, char** argv) {
                  ch;
     int          maxGmes = 0, // number of games
                  nGmsLft,     // number of games left       
-                 //round = 1, // round
+                 round = 0, // round
                  p1Guess, // player 1 guess
                  p2Guess, // player 2 guess
                  p1Ship1, // player 1 ship number 1
@@ -108,8 +112,6 @@ int main(int argc, char** argv) {
    // get player 2's name from an array of names
    p2Name = pickP2(p2Names,SIZE7);
    cout << setw(12) << p1Name << " vs " << p2Name << "!" << endl;
- 
-   
       
    cout << "\nPress any key to begin. ";
    cin.ignore();
@@ -124,7 +126,7 @@ int main(int argc, char** argv) {
         p1Ship1 = rand()%(MAX-MIN)+MIN;
         p2Ship1 = rand()%(MAX-MIN)+MIN;
         
-        cout << "p1Ship1 = " << p1Ship1 << endl
+        cout << "\np1Ship1 = " << p1Ship1 << endl
              << "p2Ship1 = " << p2Ship1 << endl;
     /*    
         std::string shpLoc1;
@@ -142,7 +144,8 @@ int main(int argc, char** argv) {
         // loops until a player correctly guesses opponents ship location
         while((!p1_crrt) && (!p2_crrt)){
             
-            rBanner(ttlRnds, false);
+//cout << "round = " << round;
+            rBanner(round, false);
             
             //*************** Player 1's Guess ************* 
             //**********************************************
@@ -195,8 +198,9 @@ int main(int argc, char** argv) {
                 // else conditional when player 1 guess is wrong  
                 } else hitMiss(p2Guess); // display MISS message for wrong guess             
             } // ends if player 1 was wrong conditional
-
-            //round++;
+   //cout << "round before ++ = " << round << endl;
+    //round++;
+    //cout << "round++ = " << round << endl;
             // if both players guess wrong, then increment round by 1
             // and display message to tell them to continue guessing 
             if((!p1_crrt) && (!p2_crrt)){
@@ -208,30 +212,31 @@ int main(int argc, char** argv) {
 
         // call function to display both player's scores
         sBanner("SCOREBOARD", p1Name, p2Name, p1Win, p2Win);        
-
+//cout << "ttlrounds = " << ttlRnds << endl;
+//cout << "rounds = " << round << endl;
         // calculate total number of games won & number rounds played
         ttlGmes = p1Win+p2Win;
-        //ttlRnds += round; // sums the total number of rounds from all games
-
+        ttlRnds += round; // sums the total number of rounds from all games
+//cout << "ttlRnds+=round = " << ttlRnds << endl;
         // calculates each players percentage of winning
         avg1 = p1Win/static_cast<float>(ttlGmes)*100;
         avg2 = p2Win/static_cast<float>(ttlGmes)*100;
-        //avgRnds = static_cast<float>(ttlRnds)/ttlGmes;
+        avgRnds = static_cast<float>(ttlRnds)/ttlGmes;
         
         // checks maximum number of games has NOT been played
         if(ttlGmes<maxGmes){
 
-            cout << "\nTotal # Games Played = " << ttlGmes << endl;
-            cout << nGmsLft << " of " << maxGmes << " max games left.\n";
-            //cout << "Total # of rounds played: " << ttlRnds << endl;
+            scoresMsg(nGmsLft,maxGmes,ttlRnds);
+            
             cout << "Play again? ";
             cin >> ans;
 
             // conditional validates user's input
             ready=isReady(ans);
             
-            if(ready){                
-                rBanner(ttlRnds, true);
+            if(ready){     
+//cout << "ready round = " << round << endl;
+                rBanner(round, true);
                 cout << endl << endl;                
             } else {
                 cout << "\nThanks for playing!\n";               
@@ -263,11 +268,12 @@ int main(int argc, char** argv) {
    
    // bubble sort names & print sorted array
    sortBub(names,SIZE8);
-   cout << "Bubble Sort \n";
+   cout << "Bubble Sort: Top Player's \n";
    print(names);
    
-   
-   
+   // selection sort
+   sortSel(names,SIZE8);
+    
     // write scores and averages to file
     outFile << fixed << showpoint << setprecision(2);
     outFile << "Player 1 wins: " << p1Win << endl
@@ -296,9 +302,44 @@ int main(int argc, char** argv) {
 void print(string arr[]){
     //cout << endl;
     for(int i=0;i<8;i++){
-        cout << arr[i] << endl;
+        cout << i+1 << ". " << arr[i] << endl;
     }
     cout << endl;
+}
+
+// selection sort
+void sortSel(string names[], int SIZE8){
+    
+    string rNames[SIZE8]={"VICTOR", "DANI", "STEPHANIE", "MIKE", "BART", "JANIS", "MICHELLE", "JILLIAN"};   
+    
+    cout << "\nLast Week's Top Players \n";
+    print(rNames);
+    
+    int    minIndx; 
+    string minVal;    
+    int last = SIZE8-1; // don't need to go the last index cause we check it by the end of loop's 1st run
+    
+    for(int start=0; start<last; start++){
+        
+        minIndx = start; // set smallest index to zero
+        minVal=rNames[start]; // set smallest value to array's 1st index
+        
+        // start loop at array's[1]
+        for( int indx=(start+1); indx<SIZE8; indx++){            
+        
+            // if its neighbor index is smaller than it
+            if(rNames[indx] < minVal){ 
+                
+                // reassign smallest to that array's index and its value
+                minVal = rNames[indx];
+                minIndx = indx;
+            }  
+        } // swap their values
+        swap1(rNames[minIndx], rNames[start]);
+    }
+    
+    cout << "\nSelection Sort: Last Week's Top Players \n";
+    print(rNames);
 }
 
 // bubble sort. compare neighboring indices one at a time
@@ -385,7 +426,6 @@ void getName(string &name1){
     
     cout << "\n Player 1: Enter your name ";
     cin >> name1; 
-    cin.ignore();
     
     // call function to convert user input into capital letters
     upper(name1);
@@ -395,8 +435,7 @@ void getName(string &name1){
 string pickP2(string p2Names[], int SIZE7){
     
     cout << "\nLocating your opponent online......\n";    
-    string name2=p2Names[rand()%(SIZE7)]; 
-    //cout << "name2 = " << name2 << endl;
+    string name2=p2Names[rand()%(SIZE7)];     
     return name2;
 }
 
@@ -405,14 +444,28 @@ void scoresMsg(int ttlGmes, int ttlRnds, float avg1, float avg2, float avgRnds){
     
     cout << fixed << showpoint << setprecision(2); 
                 cout << "\nAverages for " << ttlGmes << " games \n"
-                     //<< "Total # of rounds played: " << ttlRnds << endl
+                     << "Total # of rounds played: " << ttlRnds << endl
                      << "Player 1 won ceil(" << avg1 << ")% = " 
                      << ceil(avg1) << endl
                      << "Player 2 won ceil(" << avg2 << ")% = " 
-                     << ceil(avg2) << endl;
-            /*    cout << "Avg # of rounds to win: ceil(" << avgRnds << ") = "
+                     << ceil(avg2) << endl
+                     << "Avg # of rounds to win: ceil(" << avgRnds << ") = "
                      << ceil(avgRnds) << endl;
-             * */
+}
+
+// displays total number of games played and number of games left
+void scoresMsg(int nGmsLft, int maxGmes, int ttlRnds){
+    
+    showStatic(); // show how many games have been played
+    cout << nGmsLft << " of " << maxGmes << " max games left.\n";
+    cout << "Total # of rounds played: " << ttlRnds << endl;
+}
+
+// static variable for games
+void showStatic(){
+    static int games=1;
+    cout << "\nTotal # Games Played = " << games << endl;
+    games++;
 }
 
 // display scoreboard banner
@@ -424,20 +477,20 @@ void sBanner(string str, string p1Name, string p2Name, int p1Win, int p2Win){
                     : (k==1) ? cout << setw(21) << str << endl
                     : cout << "Error in scoreboard banner.\n";
         }
-        cout << setw(4) << " " << p1Name << setw(4) << "vs" << setw(3) << " " 
+        cout << setw(7) << " " << p1Name << setw(4) << "vs" << setw(3) << " " 
              << right << p2Name << endl;
         cout << setw(8) << p1Win << setw(16) << p2Win << endl;
 }
 
 // banner displays round number
-void rBanner(int &ttlRnds, bool isReset){
+void rBanner(int  &r, bool isReset){
     
     // declare static variable inside function
-    static int r=1;    
+    //static int r=1;    
     if(isReset) r=1;
     else {
         cout << endl << setw(26) << "********************************" << endl;
-        cout << setw(18) << "Round " << r << endl;
+        cout << setw(18) << "Round " << r+1 << endl;
         cout << setw(26) << "********************************" << endl;
         r++;
     }          
@@ -463,7 +516,7 @@ void banner(string str){
                     break;
                 } default: {
                     cout << "Error in game banner.\n";
-                    //exit(EXIT_SUCCESS);
+                    exit(EXIT_SUCCESS);
                 }
             }
         }        
