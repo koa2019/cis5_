@@ -1,9 +1,9 @@
 /* 
  * File:   main.cpp
  * Author: Danielle Fernandez
- * Created on June 1, 2022,  10:16 AM
+ * Created on June1, 2022,  3:00 PM
  * Purpose: Project 2. Covers chapters 1-9 in Gaddis. 
- * Version 3: fill 2D array with data from file
+ * Version 4: generate player's guess randomly and compare to board[][]
  */
 
 // System Libraries: 
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
                  SIZE8 = 8;
     const int    ROWS = 2,
                  COLS = 8;   // number of cols in 2D array
-   
+                 
     bool         p1_crrt, // player 1 correct
                  p2_crrt, // player 2 correct
                  ready;   // ready to continue playing
@@ -93,6 +93,9 @@ int main(int argc, char** argv) {
     string p2Names[SIZE7]={"MIKE", "BART", "JANIS", "STEPHANIE", "TING", "VICTOR", "JILLIAN"};
     char         board1[ROWS][COLS]={};
     char         board2[ROWS][COLS]={};
+    char         guessP1[ROWS][COLS]={};
+    char         guessP2[ROWS][COLS]={};
+ 
     
     // open an existing file that holds max number of games a user can play
     inFile1.open("board1.txt",ios::in);   
@@ -117,24 +120,63 @@ int main(int argc, char** argv) {
             count2++;   
         }        
     }
- 
+
     cout << setw(3)<<" " << "Read in " << setw(6)<< " " << "P1 Board" << setw(5)<< " "<< "P2 Board" << endl;
     cout << "Total # chars " << setw(8) << right << count1 << "\t \t" << count2 << "\n";
     cout << "Total # ships " << setw(8) << right << numShp1 << "\t \t " << numShp2 << "\n\n";
-   
-    // display data from both files
-    cout << setw(4) << " " << "Board 1" << "\t \t" << setw(4) << " " << "Board 2\n";
+    
+    // declare and initialize new array that holds B (blank) or S (ship)
+   const int SIZE17=17;
+    char choices[]={'B','B','B','B','B','B','S','B','B','B','S','B','S','B','B','B','S'};
+    
+    // get player's guesses randomly and save it to a 2D array
+    for(int gRow=0; gRow<ROWS; gRow++){
+        for(int gCol=0; gCol<COLS; gCol++){
+            guessP1[gRow][gCol]=choices[rand()%SIZE17];
+            guessP2[gRow][gCol]=choices[rand()%SIZE17];    
+            //cout << guessP1[gRow][gCol] << " ";
+        }        
+        //cout << endl;
+    }
+    
+    // display data successfully read in from both board.txt files
+    //cout << setw(4) << " " << "Board 1" << "\t \t" << setw(4) << " " << "Board 2\n";
     for(int pRows=0; pRows<ROWS; pRows++){
+        cout << "Board P1  Row:"<< pRows << "  ";
         for(int pCols=0; pCols<COLS; pCols++){
             cout << board1[pRows][pCols] << " ";           
         } 
         cout << "\t";
+        cout << "Board P2  Row:" << pRows << "  ";
         for(int pCols=0; pCols<COLS; pCols++){
             cout << board2[pRows][pCols] << " ";           
         }   
         cout << endl;
+        cout << "Guess P2  Row:"<< pRows  << "  ";
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << guessP2[pRows][pCols] << " ";           
+        }   
+        cout << "\t";
+        cout << "Guess P1  Row:"<< pRows << "  ";
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << guessP1[pRows][pCols] << " ";           
+        } 
+        cout << endl << endl;
     }
-    
+ /*   
+    // display data from both players guess arrays
+    cout << setw(4) << " " << "P1 Guesses" << "\t \t" << setw(4) << " " << "P2 Guesses\n";
+    for(int pRows=0; pRows<ROWS; pRows++){
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << guessP1[pRows][pCols] << " ";           
+        } 
+        cout << "\t";
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << guessP2[pRows][pCols] << " ";           
+        }   
+        cout << endl;
+    }
+*/    
     
 /*    
     // display game's introduction message
