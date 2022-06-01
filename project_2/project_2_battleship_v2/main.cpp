@@ -34,9 +34,12 @@ void dblMiss();        // try again message
 void instruc(string, const int, int =1); // instructions for players
 bool isReady(char);   // returns bool value
 string pickP2(string [],int);  // randomly picks a number for player 2
+void print(string []);
 void rBanner(int &, bool);      // display the round number
 void sBanner(string,string,string,int,int);   // display scoreboard banner
 void scoresMsg(int,int,float,float,float);  // displays scores for both players
+void sortBub(string [], int);       // sort names
+void swap1(string &, string &);
 void upper(string &); // changes string to all uppercase letters
 
 
@@ -82,7 +85,7 @@ int main(int argc, char** argv) {
     string       p1Name = " ", 
                  p2Name = " ";
                 
-    string p2Names[SIZE7]={"BART", "JANIS", "STEPHANIE", "TING", "VICTOR", "JILLIAN", "JOHN"};
+    string p2Names[SIZE7]={"MIKE", "BART", "JANIS", "STEPHANIE", "TING", "VICTOR", "JILLIAN"};
     //string board[ROWS][COLS]={{"A1","A2","A3","A4","A5","A6","A7","A8"}, {"B1","B2","B3","B4","B5","B6","B7","B8"}};
     
     // open an existing file that holds max number of games a user can play
@@ -106,11 +109,7 @@ int main(int argc, char** argv) {
    p2Name = pickP2(p2Names,SIZE7);
    cout << setw(12) << p1Name << " vs " << p2Name << "!" << endl;
  
-   // create new array to hold player 1 & player 2's names
-   string names[SIZE8]={};
    
-   // copy contents of one array to another array and add player1's name
-   copyAdd(p2Names,SIZE7,names,SIZE8,p1Name);
       
    cout << "\nPress any key to begin. ";
    cin.ignore();
@@ -251,6 +250,24 @@ int main(int argc, char** argv) {
       // ans does not equal y or Y
     } while((ans=='y')||(ans=='Y'));   
 
+    // sort names
+    // create new array to hold player 1 & player 2's names
+   string names[SIZE8]={};
+   
+   // copy contents of one array to another array and add player1's name
+   copyAdd(p2Names,SIZE7,names,SIZE8,p1Name);
+   
+   // print names array
+   cout << "\nThis week's Top Players \n";
+   print(names);
+   
+   // bubble sort names & print sorted array
+   sortBub(names,SIZE8);
+   cout << "Bubble Sort \n";
+   print(names);
+   
+   
+   
     // write scores and averages to file
     outFile << fixed << showpoint << setprecision(2);
     outFile << "Player 1 wins: " << p1Win << endl
@@ -275,8 +292,47 @@ int main(int argc, char** argv) {
 //******************* FUNCTION DEFINITIONS ****************************
 //*********************************************************************
 
-// 
+// print array
+void print(string arr[]){
+    //cout << endl;
+    for(int i=0;i<8;i++){
+        cout << arr[i] << endl;
+    }
+    cout << endl;
+}
 
+// bubble sort. compare neighboring indices one at a time
+void sortBub(string names[], int size){
+    
+    bool swap;
+    int maxElmt=size-1; // (8-1)=7. holds subscript of last element that will be compared to its neighbor
+    
+    do {
+        swap=false; // set flag
+        
+        // loop 0 thru 7
+        for(int i=0;i<maxElmt;i++){
+            if(names[i] > names[i+1]){ // "VICTOR" > "JILLIAN" ?
+                
+                // swap index values
+                swap1(names[i],names[(i+1)]);
+                
+                // reset flag value  
+                swap=true;                           
+            }
+        }       
+        maxElmt--; // decrement. biggest value is at last index, so now restart loop to run to one less last index
+    } while(swap); // while there's still indices to left to swap
+}
+
+// swap indices
+void swap1(string &a, string &b){
+    
+    string temp;
+    temp=a;
+    a=b;
+    b=temp;
+}
 
 // save player 1 and all of player 2's names to a new array
 void copyAdd(string p2Names[],const int SIZE7, string names[], const int SIZE8, string p1Name){
