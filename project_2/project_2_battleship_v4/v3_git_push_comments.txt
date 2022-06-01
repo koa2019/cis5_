@@ -1,0 +1,6 @@
+Created 2 files to represent ships or blank spots on the gameboard.
+Read in both files and filled two 2-Dimensional arrays, and counted how 
+many ships each board on them.
+Printed out number of characters and ships read in from both files.
+Printed out both 2D arrays.
+
