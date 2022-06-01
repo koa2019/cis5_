@@ -52,8 +52,8 @@ int main(int argc, char** argv) {
 
     const int    MIN = 1, // minimum number for rand()
                  MAX = 16; // maximum number for rand()
-    const int    SIZE7 = 7,  // size for player 2 names array
-                 SIZE8 = 8;
+    const int    SIZE = 7,  // size for player 2 names array
+                 SIZE2 = 8;
     const int    ROWS = 2,
                  COLS = 8;   // number of cols in 2D array
    
@@ -82,8 +82,8 @@ int main(int argc, char** argv) {
     string       p1Name = " ", 
                  p2Name = " ";
                 
-    string p2Names[SIZE7]={"BART", "JANIS", "STEPHANIE", "TING", "VICTOR", "JILLIAN", "JOHN"};
-    //string board[ROWS][COLS]={{"A1","A2","A3","A4","A5","A6","A7","A8"}, {"B1","B2","B3","B4","B5","B6","B7","B8"}};
+    string p2Names[SIZE]={"BART", "JANIS", "STEPHANIE", "TING", "VICTOR", "JILLIAN", "JOHN"};
+    string board[ROWS][COLS]={{"A1","A2","A3","A4","A5","A6","A7","A8"}, {"B1","B2","B3","B4","B5","B6","B7","B8"}};
     
     // open an existing file that holds max number of games a user can play
     inFile.open("maxNGms.txt");
@@ -103,14 +103,14 @@ int main(int argc, char** argv) {
    getName(p1Name); 
    
    // get player 2's name from an array of names
-   p2Name = pickP2(p2Names,SIZE7);
+   p2Name = pickP2(p2Names,SIZE);
    cout << setw(12) << p1Name << " vs " << p2Name << "!" << endl;
  
    // create new array to hold player 1 & player 2's names
-   string names[SIZE8]={};
+   string names[SIZE2];
    
    // copy contents of one array to another array and add player1's name
-   copyAdd(p2Names,SIZE7,names,SIZE8,p1Name);
+   copyAdd(p2Names,SIZE,names,SIZE2,p1Name);
       
    cout << "\nPress any key to begin. ";
    cin.ignore();
@@ -279,15 +279,15 @@ int main(int argc, char** argv) {
 
 
 // save player 1 and all of player 2's names to a new array
-void copyAdd(string p2Names[],const int SIZE7, string names[], const int SIZE8, string p1Name){
+void copyAdd(string p2Names[],const int SIZE, string names[], const int SIZE2, string p1Name){
    
    // copy all of player 2's name into a new array 
-   for(int i=0;i<SIZE7;i++){
+   for(int i=0;i<SIZE2;i++){
        names[i]=p2Names[i];
    }
    
    // calculate the last index for names[]
-   unsigned int last = SIZE8-1;
+   unsigned int last = SIZE2-1;
    
    // add player 1's name to the end of the names[]
    names[last]=p1Name;      
@@ -336,10 +336,10 @@ void getName(string &name1){
 }
 
 // randomly picks a name from an array as player 2's name
-string pickP2(string p2Names[], int SIZE7){
+string pickP2(string p2Names[], int SIZE){
     
     cout << "\nLocating your opponent online......\n";    
-    string name2=p2Names[rand()%(SIZE7)]; 
+    string name2=p2Names[rand()%(SIZE)]; 
     //cout << "name2 = " << name2 << endl;
     return name2;
 }
