@@ -27,6 +27,7 @@ using namespace std;
 // Function prototypes
 void banner(string);      // display game 
 void copyAdd(string [],const int,string[],const int,string);
+void fileSum(int,int,int,int);
 void getName(string &);  // get player 1's name using pass by reference
 
 void hitMiss(int,int);  // hit message for correct guess
@@ -35,6 +36,8 @@ void dblMiss();        // try again message
 void instruc(string, const int, int =1); // instructions for players
 bool isReady(char);   // returns bool value
 string pickP2(string [],int);  // randomly picks a number for player 2
+void print2DArr(const char [][8], const char [][8],
+                const char [][8],const char [][8],const int,const int,int,int);
 void print(string []);
 void rBanner(int &, bool);      // display the round number
 void sBanner(string,string,string,int,int);   // display scoreboard banner
@@ -54,6 +57,7 @@ int main(int argc, char** argv) {
     srand(static_cast<unsigned int>(time(0)));
 
     // declare variables
+    ifstream     inFile;
     ifstream     inFile1; // for reading an existing file
     ifstream     inFile2;
     ofstream     outFile; // for outputting to a file
@@ -64,13 +68,16 @@ int main(int argc, char** argv) {
                  SIZE8 = 8;
     const int    ROWS = 2,
                  COLS = 8;   // number of cols in 2D array
-                 
+    const int    SIZE17=17;    // choice array size
+    
     bool         p1_crrt, // player 1 correct
                  p2_crrt, // player 2 correct
                  ready;   // ready to continue playing
     
     char         ans, // answer  
-                 ch;
+                 ch,
+                 rowIndx = 0,// index for comparing player's guess to their opponent's board
+                 colIndx = 0; // index for comparing player's guess to their opponent's board 
     int          maxGmes = 0, // number of games
                  nGmsLft,     // number of games left       
                  round = 0, // round
@@ -82,6 +89,9 @@ int main(int argc, char** argv) {
                  p2Win = 0, // number of wins player 2 has
                  ttlGmes = 0,   // sum of both players number of wins
                  ttlRnds = 0;   // sum of total rounds played
+    int          p1GShps,
+                 p2GShps;
+    int numShp1, numShp2, count1, count2;
     
     float        avg1, // average number of wins for player 1
                  avg2, // average number of wins for player 2
@@ -90,123 +100,148 @@ int main(int argc, char** argv) {
     string       p1Name = " ", 
                  p2Name = " ";
                 
-    string p2Names[SIZE7]={"MIKE", "BART", "JANIS", "STEPHANIE", "TING", "VICTOR", "JILLIAN"};
     char         board1[ROWS][COLS]={};
     char         board2[ROWS][COLS]={};
     char         guessP1[ROWS][COLS]={};
     char         guessP2[ROWS][COLS]={};
- 
+    
+    // will be used to fill each player's guess[][]
+    char choices[SIZE17]={'B','B','B','B','B','B','S','B','B','B','S','B','S','B','B','B','S'};
+    string p2Names[SIZE7]={"MIKE", "BART", "JANIS", "STEPHANIE", "TING", "VICTOR", "JILLIAN"};
+    
+    
+    
+    // ***************************************
+    // ****** SET UP GAME STARTS HERE ********
+    // ***************************************
+    
+    
     
     // open an existing file that holds max number of games a user can play
+    inFile.open("maxNGms.txt");
     inFile1.open("board1.txt",ios::in);   
     inFile2.open("board2.txt",ios::in);
-    
-    // create a file to output to
-    //outFile.open("scores.txt");
-    
+    outFile.open("scores.txt");  // create a file to output to
+   
     // read in maximum number of games that can be played from file
-    //nGmsLft = maxGmes;  // set numberOfGamesLeft to equal maxGames
+    inFile >> maxGmes;
+    nGmsLft = maxGmes;  // set numberOfGamesLeft to equal maxGames
     
-    int numShp1, numShp2,count1, count2;
+    
+    // initialize counters to zero      
     numShp1=numShp2=count1=count2=0;
-    
+
+    // read in data from file and initialize each player's game board[][]
+    // with a S(ship) or a B(blank)   
     for(int nRows=0; nRows<ROWS; nRows++){
         for(int nCols=0; nCols< COLS ;nCols++){
-            inFile1 >> board1[nRows][nCols];
-            if(board1[nRows][nCols]=='S') numShp1++;
-            count1++;               
+            
+            inFile1 >> board1[nRows][nCols];   
+            if(board1[nRows][nCols]=='S') { 
+                numShp1++;  // count how many ships player 1 has in their array
+            }
+            count1++;   // count how many items were read in
             inFile2 >> board2[nRows][nCols];
-            if(board2[nRows][nCols]=='S') numShp2++;
-            count2++;   
+            if(board2[nRows][nCols]=='S'){
+                numShp2++;  // count how many ships player 1 has in their array
+            }
+            count2++;   // count how many items were read in
         }        
-    }
+    }     
+    
+    
+    // randomly fill guess[][] until at least one of the player's has 3 ships in their array
+    p1GShps=p2GShps=0;  // initialize both players number of ships to zero
+    bool minMet;        // minimum number of ships==3
 
-    cout << setw(3)<<" " << "Read in " << setw(6)<< " " << "P1 Board" << setw(5)<< " "<< "P2 Board" << endl;
-    cout << "Total # chars " << setw(8) << right << count1 << "\t \t" << count2 << "\n";
-    cout << "Total # ships " << setw(8) << right << numShp1 << "\t \t " << numShp2 << "\n\n";
+    do{
+        minMet=false;   // set flag
+
+        for(int gRow=0; gRow<ROWS; gRow++){
+            for(int gCol=0; gCol<COLS; gCol++){
+
+                // automatically set player 1's guess[][] randomly from choices[] 
+                guessP1[gRow][gCol]=choices[rand()%SIZE17]; // saves either a 'S' or 'B' 
+
+                // track how many ships player 1's array has
+                if(guessP1[gRow][gCol]=='S'){
+                    p1GShps++; 
+                    //cout <<"p1= " <<  p1GShps << " ";
+                    if(p1GShps==3) minMet=true;   // reasign value to flag                       
+                }
+
+                // automatically set player 2's guess[][] randomly from choices[] 
+                guessP2[gRow][gCol]=choices[rand()%SIZE17]; 
+
+                // track how many ships player 1's array has
+                if(guessP2[gRow][gCol]=='S'){
+                    p2GShps++; 
+                    //cout << "p2= " << p2GShps<< " ";
+                    if(p2GShps==3) minMet=true; 
+                }
+            }        
+            //cout << endl;
+        }
+        //cout << "Total gShips " << setw(8) << right << p1GShps << "\t \t " << p2GShps << "\n";
+        //if((p1GShps>3) || (p2GShps>3)){
+           // cout << "minimum # ships met. Should exit do while()\n";
+            //p1GShps=p2GShps=0;
+            //minMet=true;
+        //}
+    } while(!minMet);       
+
+     // ask for player 1's name
+    getName(p1Name); 
     
-    // declare and initialize new array that holds B (blank) or S (ship)
-   const int SIZE17=17;
-    char choices[]={'B','B','B','B','B','B','S','B','B','B','S','B','S','B','B','B','S'};
+    do {
+    // prompt user    
+    cout << endl << p1Name << " your game has successfully loaded. \n"
+         << "Press 1 to see a summary of the files that were read.\n"
+         << "Press 2 to confirm my game board[][] was read the data in correctly\n"
+         << "        and to that the guess[][] were randomly filled.\n"
+         << "Press 3 to start your game.\n"
+         << "Press 4 to exit.\n";
+    cin  >> ch;
     
-    // get player's guesses randomly and save it to a 2D array
-    for(int gRow=0; gRow<ROWS; gRow++){
-        for(int gCol=0; gCol<COLS; gCol++){
-            guessP1[gRow][gCol]=choices[rand()%SIZE17];
-            guessP2[gRow][gCol]=choices[rand()%SIZE17];    
-            //cout << guessP1[gRow][gCol] << " ";
-        }        
-        //cout << endl;
+    switch(ch){
+        case '1': fileSum(count1,count2,numShp1,numShp2); break;
+        case '2': print2DArr(guessP1, guessP2,board1,board2,ROWS,COLS,p1GShps,p2GShps); break;       
+        case '4':  exit(EXIT_SUCCESS); break;
+        default: cout << setw(9)<< " " << "Loading.......\n";
     }
     
-    // display data successfully read in from both board.txt files
-    //cout << setw(4) << " " << "Board 1" << "\t \t" << setw(4) << " " << "Board 2\n";
-    for(int pRows=0; pRows<ROWS; pRows++){
-        cout << "Board P1  Row:"<< pRows << "  ";
-        for(int pCols=0; pCols<COLS; pCols++){
-            cout << board1[pRows][pCols] << " ";           
-        } 
-        cout << "\t";
-        cout << "Board P2  Row:" << pRows << "  ";
-        for(int pCols=0; pCols<COLS; pCols++){
-            cout << board2[pRows][pCols] << " ";           
-        }   
-        cout << endl;
-        cout << "Guess P2  Row:"<< pRows  << "  ";
-        for(int pCols=0; pCols<COLS; pCols++){
-            cout << guessP2[pRows][pCols] << " ";           
-        }   
-        cout << "\t";
-        cout << "Guess P1  Row:"<< pRows << "  ";
-        for(int pCols=0; pCols<COLS; pCols++){
-            cout << guessP1[pRows][pCols] << " ";           
-        } 
-        cout << endl << endl;
-    }
- /*   
-    // display data from both players guess arrays
-    cout << setw(4) << " " << "P1 Guesses" << "\t \t" << setw(4) << " " << "P2 Guesses\n";
-    for(int pRows=0; pRows<ROWS; pRows++){
-        for(int pCols=0; pCols<COLS; pCols++){
-            cout << guessP1[pRows][pCols] << " ";           
-        } 
-        cout << "\t";
-        for(int pCols=0; pCols<COLS; pCols++){
-            cout << guessP2[pRows][pCols] << " ";           
-        }   
-        cout << endl;
-    }
-*/    
+    if(ch=='1' || ch=='2'){
     
-/*    
+    cout << "Run Menu again?\n";
+    cin >> ans;
+    } else ans='n';
+    
+    // continue doing all the statements above until 
+    // ans does not equal y or Y
+    } while((ans=='y')||(ans=='Y')); 
+    
     // display game's introduction message
     string gameNme = "BATTLE";
-    banner(gameNme); 
+    banner(gameNme);  
     
-    // ask for player 1's name
-   getName(p1Name); 
+    // get player 2's name from an array of names
+    p2Name = pickP2(p2Names,SIZE7);
+    cout << setw(12) << p1Name << " vs " << p2Name << "!" << endl;
+
+    cout << "\nPress any key to begin. ";
+    cin.ignore();
+    cin.get();   // pause screen before game starts
+        
+    //***************************************
+    //******** GAME STARTS HERE**************
+    //***************************************
+    
    
-   // get player 2's name from an array of names
-   p2Name = pickP2(p2Names,SIZE7);
-   cout << setw(12) << p1Name << " vs " << p2Name << "!" << endl;
-      
-   cout << "\nPress any key to begin. ";
-   cin.ignore();
-   cin.get();   // pause screen before game starts
-  
     do { // game starts here
                 
-        // sets variables to default starting values
-        p1_crrt = p2_crrt = false;
-        
-        // initial variables to represent the location of each player's ship        
-        p1Ship1 = rand()%(MAX-MIN)+MIN;
-        p2Ship1 = rand()%(MAX-MIN)+MIN;
-        
-        cout << "\np1Ship1 = " << p1Ship1 << endl
-             << "p2Ship1 = " << p2Ship1 << endl;
-    
-      
+        // sets games flag variables to their default starting values
+        p1_crrt = p2_crrt = false;     
+ 
         // loops until a player correctly guesses opponents ship location
         while((!p1_crrt) && (!p2_crrt)){
             
@@ -219,63 +254,83 @@ int main(int argc, char** argv) {
             instruc(p1Name, MAX);                
             
             // program generates random number guess
-            p1Guess = rand()%(MAX-MIN)+MIN;
+            //p1Guess = rand()%(MAX-MIN)+MIN;
 
             // checks if player1 guess is correct
-            if(p1Guess == p2Ship1){
+            //if(p1Guess == p2Ship1){                 
+            if(guessP1[rowIndx][colIndx]==board2[rowIndx][colIndx]){
+            
+                numShp2--;  // decrease number of ships player 2 has left
 
-                // increment player 1 number of wins
+                // increment player 1 number of wins                            
                 p1Win++;
-                nGmsLft--;  // decrease number of total games
-
-                // reassign player 1's value for a correct guess
-                p1_crrt = true;                             
-
-                // display HIT message for correct guess
-                hitMiss(p1Guess, p2Ship1);    
                 
-            // else conditional when player 1 guess is wrong  
+                // display HIT message for correct guess
+                hitMiss(p1Guess, p2Ship1);  
+                
+                if(numShp2==0){
+                    
+                    nGmsLft--;  // decrease number of total games
+                    
+                    p1_crrt = true;   // reassign player 1's value for a correct guess                          
+                }
+                                                                   
+              // else conditional when player 1 guess is wrong  
             } else hitMiss(p1Guess); // display MISS message for wrong guess
 
             // conditional only runs if player 1 misses player 2's ship
             if(!p1_crrt){
 
-                //*************** Player 2's Guess *************
-                //**********************************************
-                // display instructions to player 2
-                instruc(p2Name, MAX);
                 
-                // program automatically generates a guess for player 2
-                p2Guess = rand()%(MAX-MIN)+MIN;
+                //**********************************************
+                //*************** Player 2's Guess *************
+                //**********************************************                
+                
+                instruc(p2Name, MAX);  // display instructions to player 2                
 
-                // conditional checks if guess is correct
-                if(p2Guess == p1Ship1){
-
-                    // increment player 2 number of wins
-                    p2Win++;
-                    nGmsLft--;  // decrease number of total games
+                // conditional checks if player 2's guess is correct
+                // program automatically generated  guess for player 2                           
+                if(guessP2[rowIndx][colIndx]==board1[rowIndx][colIndx]){
+                            
+                    numShp1--;  // decrement number of ships player 1 has                    
+                     
+                    p2Win++; //    increment player 2 number of wins
                     
-                    // reassign player 2's value for a correct guess
-                    p2_crrt = true;
-
                     // display HIT message for correct guess  
                     hitMiss(p2Guess, p1Ship1);
                     
-                // else conditional when player 1 guess is wrong  
-                } else hitMiss(p2Guess); // display MISS message for wrong guess             
-            } // ends if player 1 was wrong conditional
+                    if(numShp1==0){
+                    
+                        nGmsLft--;  // decrease number of total games
+
+                        p2_crrt = true;   // reassign player 1's value for a correct guess                          
+                    }
+                    
+                  // else conditional when player 2 guess is wrong  
+                } else hitMiss(p2Guess); // display MISS message for player 2's wrong guess  
+                
+            } // ends player 2's turn
+            
+            
    //cout << "round before ++ = " << round << endl;
     //round++;
     //cout << "round++ = " << round << endl;
+            
+            
             // if both players guess wrong, then increment round by 1
             // and display message to tell them to continue guessing 
             if((!p1_crrt) && (!p2_crrt)){
                 
+                // increment index that compare guess[][]to board[][]
+                rowIndx++;
+                colIndx++;
+                
                 // display try again message when both players guess wrong
                 dblMiss();
             }
-        }// ends while()
+        } // ends while(!p1_crrt) && (!p2_crrt)
 
+        // One of the player's has sunk all of their opponents ships, so
         // call function to display both player's scores
         sBanner("SCOREBOARD", p1Name, p2Name, p1Win, p2Win);        
 //cout << "ttlrounds = " << ttlRnds << endl;
@@ -303,10 +358,11 @@ int main(int argc, char** argv) {
             if(ready){     
 //cout << "ready round = " << round << endl;
                 rBanner(round, true);
-                cout << endl << endl;                
+                cout << endl << endl; 
+                rowIndx=colIndx=0;  // resets index for guess[][]
             } else {
                 cout << "\nThanks for playing!\n";               
-                scoresMsg(ttlGmes, ttlRnds, avg1, avg2, avgRnds);
+                scoresMsg(ttlGmes, ttlRnds, avg1, avg2, avgRnds);   // displays player's averages
             }      
         } else { // display end of game results
            
@@ -321,6 +377,8 @@ int main(int argc, char** argv) {
       // ans does not equal y or Y
     } while((ans=='y')||(ans=='Y'));   
 
+    
+/*    
     // sort names
     // create new array to hold player 1 & player 2's names
    string names[SIZE8]={};
@@ -349,19 +407,19 @@ int main(int argc, char** argv) {
             << ceil(avg1) << endl
             << "Player 2 won ceil(" << avg2 << ")% = " 
             << ceil(avg2) << endl;
+*/    
     
- * // close scores.txt file
-    outFile.close();
-*/      
     
-    // close file being read in
+    // close files being read in and written to
+    inFile.close();
     inFile1.close();
-    inFile2.close();
-    
+    inFile2.close();    
+    outFile.close();   
 
     // exit code
     return 0;
 }
+
 
 //*********************************************************************
 //******************* FUNCTION DEFINITIONS ****************************
@@ -493,9 +551,9 @@ void upper(string &name){
 // get player 1's name
 void getName(string &name1){   
     
-    cout << "\n Player 1: Enter your name ";
+    cout << "\nPlayer 1: Enter your name ";
     cin >> name1; 
-    
+    cout << endl;
     // call function to convert user input into capital letters
     upper(name1);
 }
@@ -585,7 +643,7 @@ void banner(string str){
                     break;
                 } default: {
                     cout << "Error in game banner.\n";
-                    exit(EXIT_SUCCESS);
+                   
                 }
             }
         }        
@@ -607,4 +665,68 @@ void hitMiss(int guess){
 // display try again message when both player's guessed wrong
 void dblMiss(){
     cout << endl << "You Both Missed. Try Again..." << endl << endl;
+}
+
+// 
+void fileSum(int count1, int count2, int numShp1, int numShp2){
+   
+    // confirm data that was read in is even and contains at least 3 ships
+    cout << endl << setw(3)<<" " << "Read in " << setw(6)<< " " << "P1 Board" << setw(5)<< " "<< "P2 Board" << endl;
+    cout << "Total # chars " << setw(8) << right << count1 << "\t \t" << count2 << "\n";
+    cout << "Total # ships " << setw(8) << right << numShp1 << "\t \t" << numShp2 << "\n\n";
+    
+}
+
+// 
+void print2DArr(const char guessP1[][8], const char guessP2[][8],
+                const char board1[][8],const char board2[][8], 
+                const int ROWS,const int COLS, int p1GShps, int p2GShps){
+ 
+    // display data from both players guess arrays
+    cout << "\nConfirming Guess arrays are random and have at least 3 S in each array\n";
+    cout << setw(4) << " " << "P1 Guesses" << "\t \t" << setw(4) << " " << "P2 Guesses\n";
+    for(int pRows=0; pRows<ROWS; pRows++){
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << guessP1[pRows][pCols] << " ";           
+        } 
+        cout << "\t";
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << guessP2[pRows][pCols] << " ";           
+        }   
+        cout << endl;
+    } 
+    cout <<"P1 # Ships : " << p1GShps 
+         << setw(10) << " " <<  "P2 # Ships : " << p2GShps << endl<<endl <<endl;
+    
+    
+    // compares player 1's board[][] to player 2's guess[][] and vice versa
+    cout << setw(4) << " " << "P1 Guessing P2 Ship " << "\t \t " 
+         << setw(4) << " " << "P2 Guessing P1 Ship \n";
+    
+    for(int pRows=0; pRows<ROWS; pRows++){
+        
+        cout << "Guess P1  Row:"<< pRows << "  ";
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << guessP1[pRows][pCols] << " ";           
+        } 
+          
+        cout << "\t";
+        cout << "Guess P2  Row:"<< pRows  << "  ";
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << guessP2[pRows][pCols] << " ";           
+        } 
+        
+        cout << endl;
+        cout << "Board P2  Row:" << pRows << "  ";
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << board2[pRows][pCols] << " ";           
+        } 
+       
+        cout << "\t";
+        cout << "Board P1  Row:"<< pRows << "  ";
+        for(int pCols=0; pCols<COLS; pCols++){
+            cout << board1[pRows][pCols] << " ";           
+        }         
+        cout << endl << endl;
+    }  
 }
