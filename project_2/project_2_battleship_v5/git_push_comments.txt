@@ -17,3 +17,16 @@ added a menu to display summary of successfully file data read in,
 function displays the contents of all four 2D arrays.
 added a function that passes 2D arrays with using a global variale. 
 Global vars are not allowed on this project.
+
+v5
+so many changes! Removed main do..while(). Changed 2D array loops 
+to start at 1 instead of zero. changed rowIndx & colIndx to int instead of chars.
+Removed maxGms from being read from file. maxGms is initialized to the player
+who has the most amount of wins based on comparing each player's board to their
+opponents board. Moved the bool isReady() to run each time after a player 
+gets a hit. Added a runMenu()
+
+v5
+added binarySearch() to find a string in names[]; 
+Put all the search and sort functions into a void topPlyrs().
+Added that function to the runMenu().

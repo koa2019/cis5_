@@ -39,7 +39,8 @@ void hitMiss();        // try again message
 void instruc(string, const int, int =1); // instructions for players
 bool isReady(char);   // returns bool value
 void runMenu(string, char &, char &, int,int,int,int,char [][9],char [][9],
-             char [][9],char [][9],int,int,int,int,int &,int&);
+             char [][9],char [][9],int,int,int,int,int &,int&,string [],int,
+             string [],int);
 void pause();
 string pickP2(string [],int);  // randomly picks a number for player 2
 void plyrVsShip(int,int,const char [][9],const char [][9],const int,const int);
@@ -49,12 +50,14 @@ void print(string []);
 void rBanner(int &);      // display the round number
 void sBanner(string,string,string,int,int);   // display scoreboard banner
 void sortSel(string [], int );      // selection sort
-void scoresMsg( int,int,int);  // displays number of games played and how many are left minus maxGames
+int binarySrch(string [],string &,int);
+void scoresMsg(int,int,int);  // displays number of games played and how many are left minus maxGames
 void scoresMsg(int,int,float);  // displays scores for both players
 void showGuess(int,int);
 void showStatic();
 void sortBub(string [],int);       // sort names
 void swap1(string &,string &);
+void topPlyrs(string [],int,string [],int,string);
 void upper(string &); // changes string to all uppercase letters
 
 
@@ -121,8 +124,8 @@ int main(int argc, char** argv) {
     
     // will be used to fill each player's guess[][]
     char choices[SIZE17]={'S','B','S','S','B','S','S','B','S','S','B','S','S','B','S','S','B'};
-    string p2Names[SIZE7]={"MIKE", "BART", "JANIS", "STEPHANIE", "TING", "VICTOR", "JILLIAN"};
-    
+    string p2Names[SIZE7]={"MIKE", "BART", "JANIS", "STEPHANIE", "TING", "VICTOR", "JILLIAN"};   
+   string names[SIZE8]={};   // create new array to hold player 1 & player 2's names
     
     
     // ***************************************
@@ -169,8 +172,7 @@ int main(int argc, char** argv) {
         fllGArr(guessP1,guessP2,choices,ROWS,COLS,p1GShps,p2GShps);     
         
         runMenu(p1Name,ch,ans,count1,count2,numShp1,numShp2,guessP1,guessP2,board1,board2,
-           p1GShps,p2GShps,ROWS,COLS,maxGms,winner);
-  
+           p1GShps,p2GShps,ROWS,COLS,maxGms,winner,p2Names,SIZE7,names,SIZE8);
    
     
     // display game's introduction message
@@ -226,8 +228,10 @@ int main(int argc, char** argv) {
                 // conditional validates user's input
                 ready=isReady(ans);
                 
-                if(ready) plyrVsShip(1,2,guessP1,board2,ROWS,COLS);
-                pause();
+                if(ready) {
+                    plyrVsShip(1,2,guessP1,board2,ROWS,COLS);
+                    pause();
+                }
                 
                 if(maxGms==p1Win){ // declares winner when opponent has no more ships                   
                     //nGmsLft--;  // decrease number of total games                    
@@ -268,8 +272,10 @@ int main(int argc, char** argv) {
 
                     // conditional validates user's input
                     ready=isReady(ans);
-                    if(ready) plyrVsShip(1,2,guessP1,board2,ROWS,COLS);
-                    pause();
+                    if(ready){
+                        plyrVsShip(1,2,guessP1,board2,ROWS,COLS);
+                        pause();
+                    }
                     
                     // 
                     if(maxGms==p2Win){   // declares winner when opponent has no more ships                 
@@ -314,38 +320,17 @@ int main(int argc, char** argv) {
         sBanner("SCOREBOARD", p1Name, p2Name, p1Win, p2Win);      
         scoresMsg(ttlGmes, ttlRnds, avgRnds);     
     
-/*    
-    // sort names
-    // create new array to hold player 1 & player 2's names
-   string names[SIZE8]={};
-   
-   // copy contents of one array to another array and add player1's name
-   copyAdd(p2Names,SIZE7,names,SIZE8,p1Name);
-   
-   // print names array
-   cout << "\nThis week's Top Players \n";
-   print(names);
-   
-   // bubble sort names & print sorted array
-   sortBub(names,SIZE8);
-   cout << "Bubble Sort: Top Player's \n";
-   print(names);
-   
-   // selection sort
-   sortSel(names,SIZE8);
-    
+        pause();
+        
+    // call function to sort & search names   
+    topPlyrs(p2Names,SIZE7,names,SIZE8,p1Name);
+
     // write scores and averages to file
     outFile << fixed << showpoint << setprecision(2);
     outFile << "Player 1 wins: " << p1Win << endl
             << "Player 2 wins: " << p2Win << endl
-            << ttlGmes << " of " << maxGms << " max games were played.\n"    
-            << "Player 1 won ceil(" << avg1 << ")% = " 
-            << ceil(avg1) << endl
-            << "Player 2 won ceil(" << avg2 << ")% = " 
-            << ceil(avg2) << endl;
-*/    
-    
-    
+            << ttlGmes << " of " << maxGms << " max games were played.\n";
+     
     // close files being read in and written to
     //inFile.close();
     inFile1.close();
@@ -360,75 +345,64 @@ int main(int argc, char** argv) {
 //*********************************************************************
 //******************* FUNCTION DEFINITIONS ****************************
 //*********************************************************************
-void runMenu(string p1Name, char &ch, char &ans, int count1,int count2,int numShp1,int numShp2,
-             char guessP1[][9],char guessP2[][9],char board1[][9],char board2[][9],
-             int p1GShps,int p2GShps,int ROWS,int COLS,int &maxGms, int &winner){
-    do {
-        // prompt user    
-        cout << endl << p1Name << " your game has successfully loaded. \n"
-             << "Press 1: to see a summary of the files that were read.\n"
-             << "Press 2: to confirm Guess[][] filled correctly\n"
-             << "Press 3: to confirm my game board[][] was read the data in correctly\n"
-             << "        and to that the guess[][] were randomly filled.\n"
-             << "Press 4: to start your game.\n"
-             << "Press 5: to exit.\n";
-        cin  >> ch;
 
-        switch(ch){       
-            case '1': fileSum(count1,count2,numShp1,numShp2); break;
-            void cGssArr(const char [][9], const char [][9],const int,const int,int, int); // confirms guess[][] filled correctly
+void topPlyrs(string p2Names[],int SIZE7,string names[],int SIZE8, string p1Name){
+   // copy contents of one array to another array and add player1's name
+   copyAdd(p2Names,SIZE7,names,SIZE8,p1Name);
+   
+   // print names array
+   cout << "\nThis week's Top Players \n";
+   print(names);
+   
+   // bubble sort names & print sorted array
+   sortBub(names,SIZE8);
+   cout << "Bubble Sort: Top Player's \n";
+   print(names);
+   
+   string sName;
+   cout << "Enter a player's name to see their highest score\n";
+   cin >> sName;
+   int score = binarySrch(names,sName,SIZE8);
+   if(score==-1){
+       cout << "Sorry, " << sName << " wasn't found.\n";
+   } else cout << sName << " is in the " << score+1 << " spot of this week's top player.\n\n";
+   
+   pause();
+   
+   // selection sort
+   sortSel(names,SIZE8);
+  }
 
-            case '2': cGssArr(guessP1, guessP2,ROWS,COLS,p1GShps,p2GShps);break;
-            case '3': print2DArr(guessP1, guessP2,board1,board2,ROWS,COLS,maxGms,winner); break;       
-            case '5': exit(EXIT_SUCCESS); break;
-            default: cout << setw(9)<< " " << "Loading.......\n";
-        }
-
-        if(ch=='1' || ch=='2' || ch=='3'){    
-            cout << "Run Menu again?\n";
-            cin >> ans;
-        } else ans='n';
+// binary search 
+ int binarySrch(string names[], string &name, int SIZE8){
     
-    // continue doing all the statements above until 
-    // ans does not equal y or Y
-    } while((ans=='y')||(ans=='Y')); 
+    int indx=0,
+        first=0,
+        last=SIZE8-1,
+        middle,
+        position=-1;
+    
+    bool found=false;
+    
+    upper(name);    // change string to all uppercase letters
+    
+    while(!found && first<=last){ // search between indicies [0,7]
+        
+        middle = (first + last)/2; // middle index
+        if(names[middle]==name){ // check if middle indx equals name
+            found=true;
+            position=middle;
+           
+          // if name ASCii value is smaller then its in lower half of array  
+        } else if(names[middle]>name){ 
+            last= middle-1;
+          
+          // if name ASCii value is smaller then its in upper half of array
+        } else first = middle+1;  
+    }      
+    return position;
 }
 
-// randomly fill guess[][] until at least one of the player's has 3 ships in their array
-void fllGArr(char guessP1[][9],char guessP2[][9],char choices[],int ROWS,int COLS,int &p1GShps, int &p2GShps){
-    int size=17;
-    p1GShps=p2GShps=0;  // initialize both players number of ships to zero
-    bool minMet;        // minimum number of ships==3
-
-    do{
-        minMet=false;   // set flag
-
-        for(int gRow=1; gRow<ROWS; gRow++){
-            for(int gCol=1; gCol<COLS; gCol++){
-
-                // automatically set player 1's guess[][] randomly from choices[] 
-                guessP1[gRow][gCol]=choices[rand()%size]; // saves either a 'S' or 'B' 
-
-                // track how many ships player 1's array has
-                if(guessP1[gRow][gCol]=='S'){
-                    p1GShps++; 
-                    //cout <<"p1= " <<  p1GShps << " ";
-                    if(p1GShps==3) minMet=true;   // reassign value to flag 
-                                          
-                }
-                // automatically set player 2's guess[][] randomly from choices[] 
-                guessP2[gRow][gCol]=choices[rand()%size]; 
-
-                // track how many ships player 1's array has
-                if(guessP2[gRow][gCol]=='S'){
-                    p2GShps++; 
-                    //cout << "p2= " << p2GShps<< " ";
-                   if(p2GShps==3) minMet=true;   // reassign value to flag
-                }
-            }        
-        }       
-    } while(!minMet); 
-}
 
 // print array
 void print(string arr[]){
@@ -470,7 +444,7 @@ void sortSel(string names[], int SIZE8){
         swap1(rNames[minIndx], rNames[start]);
     }
     
-    cout << "\nSelection Sort: Last Week's Top Players \n";
+    cout << "Selection Sort: Last Week's Top Players \n";
     print(rNames);
 }
 
@@ -775,9 +749,82 @@ void print2DArr(const char guessP1[][9], const char guessP2[][9],
          << " in round [" << rIndx2 <<"]["<<cIndx2<<"]" <<endl<<endl;          
 }
 
+void runMenu(string p1Name, char &ch, char &ans, int count1,int count2,int numShp1,int numShp2,
+             char guessP1[][9],char guessP2[][9],char board1[][9],char board2[][9],
+             int p1GShps,int p2GShps,int ROWS,int COLS,int &maxGms, int &winner,
+             string p2Names[],int SIZE7,string names[],int SIZE8){
+    do {
+        // prompt user    
+        cout << endl << p1Name << " your game has successfully loaded. \n"
+             << "Press 1: to see a summary of the files that were read.\n"
+             << "Press 2: to confirm Guess[][] filled correctly\n"
+             << "Press 3: to confirm my game board[][] was read the data in correctly\n"
+             << "        and to that the guess[][] were randomly filled.\n"
+             << "Press 4: to start your game.\n"
+             << "Press 5: to run Top Player's Board.\n"
+             << "Press 6: to exit.\n";
+        cin  >> ch;
+
+        switch(ch){       
+            case '1': fileSum(count1,count2,numShp1,numShp2); break;
+            void cGssArr(const char [][9], const char [][9],const int,const int,int, int); // confirms guess[][] filled correctly
+
+            case '2': cGssArr(guessP1, guessP2,ROWS,COLS,p1GShps,p2GShps);break;
+            case '3': print2DArr(guessP1, guessP2,board1,board2,ROWS,COLS,maxGms,winner); break;       
+            case '5': topPlyrs(p2Names,SIZE7,names,SIZE8,p1Name);
+            case '6': exit(EXIT_SUCCESS); break;
+            default: cout << setw(9)<< " " << "Loading.......\n";
+        }
+
+        if(ch=='1' || ch=='2' || ch=='3'|| ch=='5'){    
+            cout << "Run Menu again?\n";
+            cin >> ans;
+        } else ans='n';
+    
+    // continue doing all the statements above until 
+    // ans does not equal y or Y
+    } while((ans=='y')||(ans=='Y')); 
+}
+
+// randomly fill guess[][] until at least one of the player's has 3 ships in their array
+void fllGArr(char guessP1[][9],char guessP2[][9],char choices[],int ROWS,int COLS,int &p1GShps, int &p2GShps){
+    int size=17;
+    p1GShps=p2GShps=0;  // initialize both players number of ships to zero
+    bool minMet;        // minimum number of ships==3
+
+    do{
+        minMet=false;   // set flag
+
+        for(int gRow=1; gRow<ROWS; gRow++){
+            for(int gCol=1; gCol<COLS; gCol++){
+
+                // automatically set player 1's guess[][] randomly from choices[] 
+                guessP1[gRow][gCol]=choices[rand()%size]; // saves either a 'S' or 'B' 
+
+                // track how many ships player 1's array has
+                if(guessP1[gRow][gCol]=='S'){
+                    p1GShps++; 
+                    //cout <<"p1= " <<  p1GShps << " ";
+                    if(p1GShps==3) minMet=true;   // reassign value to flag 
+                                          
+                }
+                // automatically set player 2's guess[][] randomly from choices[] 
+                guessP2[gRow][gCol]=choices[rand()%size]; 
+
+                // track how many ships player 1's array has
+                if(guessP2[gRow][gCol]=='S'){
+                    p2GShps++; 
+                    //cout << "p2= " << p2GShps<< " ";
+                   if(p2GShps==3) minMet=true;   // reassign value to flag
+                }
+            }        
+        }       
+    } while(!minMet); 
+}
+
 // pause screen before game starts
 void pause(){    
-    cout << "\nPress any key to continue. ";
+    cout << "\nPress enter to continue. ";
     cin.ignore();
     cin.get();   
 }
