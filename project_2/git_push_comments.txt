@@ -40,3 +40,8 @@ v6
 created an overloaded printArr[] for char[][]. 
 Replaced all the printing double for loops with the 
 new printArr[];
+
+v6
+created confirmArr9() to ask if player wants to confirm 
+a correct guess by looking at the arrays. 
+Added a flowchart and finished the main().
