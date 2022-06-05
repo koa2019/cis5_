@@ -35,3 +35,8 @@ v6
 changed sortSel() to a vector selSort(); 
 Edited runMenu() and topPlyrs() to accept
 and pass a vector.
+
+v6
+created an overloaded printArr[] for char[][]. 
+Replaced all the printing double for loops with the 
+new printArr[];
