@@ -28,6 +28,7 @@ using namespace std;
 void banner(string);      // display game 
 int  binarySrch(string [],string &,int);
 void cGssArr(const char [][9], const char [][9],const int,const int,int, int); // confirms guess[][] filled correctly             
+void chckArr(char &);
 void copyAdd(string [],const int,string[],const int,string);
 void fileSum(int,int,int,int);
 void fllGArr(char [][9],char [][9],char [], int, int, int &, int&);
@@ -64,8 +65,7 @@ int main(int argc, char** argv) {
     // set random number seed
     srand(static_cast<unsigned int>(time(0)));
 
-    // declare variables
-    ifstream     inFile;
+    // declare variables   
     ifstream     inFile1; // for reading an existing file
     ifstream     inFile2;
     ofstream     outFile; // for outputting to a file
@@ -160,8 +160,10 @@ int main(int argc, char** argv) {
      // ask for player 1's name
     getName(p1Name); 
    
+    // fill guess[] [] with choices[]
     fllGArr(guessP1,guessP2,choices,ROWS,COLS,p1GShps,p2GShps);     
 
+    // 
     runMenu(p1Name,ch,ans,count1,count2,numShp1,numShp2,guessP1,guessP2,board1,board2,
        p1GShps,p2GShps,ROWS,COLS,maxGms,winner,p2Names,SIZE7,names,SIZE8,vNames);
 
@@ -194,7 +196,7 @@ int main(int argc, char** argv) {
       
         instruc(p1Name,MAX);    // display instructions to player 1          
 
-        // program generates random number guess
+        // returns value from each array's indices
         p1Guess = guessP1[rowIndx][colIndx];
         p2Ship1 = board2[rowIndx][colIndx];
         showGuess(rowIndx,colIndx);
@@ -207,9 +209,8 @@ int main(int argc, char** argv) {
             isHit=true;  // reset flag                            
             hitMiss(isHit,p1Guess,p2Ship1);  // display HIT message for correct guess
 
-            cout << "Would you like to confirm it was a hit? ";
-            cin >> ans;
-
+            chckArr(ans); // ask if they want to check arrays
+            
             // conditional validates user's input
             ready=isReady(ans);
 
@@ -249,13 +250,12 @@ int main(int argc, char** argv) {
                 isHit=true;   // reset flag                                  
                 hitMiss(isHit,p2Guess, p1Ship1);    // display HIT message for correct guess  
 
-                cout << "Would you like to confirm it was a hit? ";
-                cin >> ans;
+                chckArr(ans);
 
                 // conditional validates user's input
                 ready=isReady(ans);
                 if(ready){
-                    plyrShpBrd(1,2,guessP1,board2,ROWS,COLS);
+                    plyrShpBrd(2,1,guessP2,board1,ROWS,COLS);                   
                     pause();
                 }
 
@@ -268,8 +268,8 @@ int main(int argc, char** argv) {
             }
         } // ends player 2's turn
         
-            // increment index that controls the guess[][] & board[][]
-            if(colIndx<=8) colIndx++;                           
+        // increment index that controls the guess[][] & board[][]
+        if(colIndx<=8) colIndx++;                           
 
         // if both players guess wrong, then increment round by 1
         // and display message to tell them to continue guessing 
@@ -575,7 +575,7 @@ void print2DArr(const char guessP1[][9], const char guessP2[][9],
 void plyrShpBrd(int player,int opponnt,const char guess[][9],const char board[][9], 
                 const int ROWS,const int COLS){
     
-    cout << setw(19)<<" "<< "A1 B1 C1 D1 E1 F1 G1 H1 A2 B2 C2 D2 E2 F2 G2 H2\n";
+    cout << endl << setw(19)<<" "<< "A1 B1 C1 D1 E1 F1 G1 H1 A2 B2 C2 D2 E2 F2 G2 H2\n";
          
     cout << "Player "<<player<< " Guesses:  ";    
     prntArr(guess,ROWS,COLS);
@@ -734,6 +734,12 @@ void copyAdd(string p2Names[],const int SIZE7, string names[], const int SIZE8, 
    
    // add player 1's name to the end of the names[]
    names[last]=p1Name;      
+}
+
+// 
+void chckArr(char &ans){
+            cout << "Would you like to confirm it was a hit? ";
+            cin >> ans;
 }
 
 // display data from both player's guess arrays. 
