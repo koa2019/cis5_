@@ -45,3 +45,7 @@ v6
 created confirmArr9() to ask if player wants to confirm 
 a correct guess by looking at the arrays. 
 Added a flowchart and finished the main().
+
+v6
+had to add a second array that held scores within the
+topPlyrs() and then print out parallel arrays.

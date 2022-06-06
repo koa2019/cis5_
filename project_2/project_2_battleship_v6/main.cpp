@@ -92,12 +92,12 @@ int main(int argc, char** argv) {
             
     int          rowIndx,// index for comparing player's guess to their opponent's board
                  colIndx, // index for comparing player's guess to their opponent's board 
-                 maxGms = 0, // number of games
+                 maxGms=0, // number of games
                  round=0, // round                 
-                 p1Win = 0, // number of wins player 1 has
-                 p2Win = 0, // number of wins player 2 has
-                 ttlGmes = 0,   // sum of both players number of wins
-                 ttlRnds = 0,   // sum of total rounds played
+                 p1Win=0, // number of wins player 1 has
+                 p2Win=0, // number of wins player 2 has
+                 ttlGmes=0,   // sum of both players number of wins
+                 ttlRnds=0,   // sum of total rounds played
                  p1GShps,
                  p2GShps,
                  numShp1, 
@@ -106,9 +106,7 @@ int main(int argc, char** argv) {
                  count2,
                  winner;
     
-    float        avg1, // average number of wins for player 1
-                 avg2, // average number of wins for player 2
-                 avgRnds;   // average rounds it takes to win
+    float        avgRnds;   // average rounds it takes to win
     
     string       p1Name = " ", 
                  p2Name = " ";
@@ -157,13 +155,13 @@ int main(int argc, char** argv) {
         }        
     }       
 
-     // ask for player 1's name
+    // ask for player 1's name
     getName(p1Name); 
    
     // fill guess[] [] with choices[]
     fllGArr(guessP1,guessP2,choices,ROWS,COLS,p1GShps,p2GShps);     
 
-    // 
+    // show switch menu
     runMenu(p1Name,ch,ans,count1,count2,numShp1,numShp2,guessP1,guessP2,board1,board2,
        p1GShps,p2GShps,ROWS,COLS,maxGms,winner,p2Names,SIZE7,names,SIZE8,vNames);
 
@@ -189,17 +187,17 @@ int main(int argc, char** argv) {
     // loops until a player correctly guesses opponents ship location
     while((!p1_crrt) && (!p2_crrt)){
 
-        rBanner(round);
+        rBanner(round); // display round number banner
 
         //*************** Player 1's Guess ************* 
         //**********************************************        
       
         instruc(p1Name,MAX);    // display instructions to player 1          
 
-        // returns value from each array's indices
+        // set variables to the their 1st array's indices
         p1Guess = guessP1[rowIndx][colIndx];
         p2Ship1 = board2[rowIndx][colIndx];
-        showGuess(rowIndx,colIndx);
+        showGuess(rowIndx,colIndx); // show players guess 
 
         // checks if player1 guess is correct
         if((p1Guess=='S') && (p2Ship1=='S')){                 
@@ -208,18 +206,19 @@ int main(int argc, char** argv) {
             p1Win++;    // increment player 1 number of wins 
             isHit=true;  // reset flag                            
             hitMiss(isHit,p1Guess,p2Ship1);  // display HIT message for correct guess
-
             chckArr(ans); // ask if they want to check arrays
             
-            // conditional validates user's input
+            // validates user's input
             ready=isReady(ans);
 
             if(ready) {
+                
+                // display opposing 2D arrays to confirm it was a hit
                 plyrShpBrd(1,2,guessP1,board2,ROWS,COLS);
                 pause();
             }
 
-            // checks if player is winner
+            // checks if player 1's number of wins equals max games 
             if(maxGms==p1Win) p1_crrt = true;   // reassign player 1's value for a correct guess                          
                                                                               
         } else { // else when player 1 guess is wrong 
@@ -271,8 +270,7 @@ int main(int argc, char** argv) {
         // increment index that controls the guess[][] & board[][]
         if(colIndx<=8) colIndx++;                           
 
-        // if both players guess wrong, then increment round by 1
-        // and display message to tell them to continue guessing 
+        // if both players guessed wrong, then       
         if((!p1_crrt) && (!p2_crrt)){
 
             // increases row and resets column
@@ -352,11 +350,19 @@ void topPlyrs(string p2Names[],int SIZE7,string names[],int SIZE8, string p1Name
    
    // bubble sort names & print sorted array
    sortBub(names,SIZE8);
+   float scores[SIZE8]={98.98, 99.84, 99.81, 99.80, 99.78, 99.74, 99.71, 99.69};
    cout << "Bubble Sort: Top Player's \n";
-   prntArr(names);
+   
+   // print parallel arrays
+   for(int i=0; i<SIZE8; i++){       
+            cout << setw(3)<< i+1 << ". "<<setw(12)
+                 << left << names[i] << setw(6) << " "
+                 << scores[i] << endl;
+    }
+    cout << endl;
    
    string sName;
-   cout << "Enter a player's name to see their highest score\n";
+   cout << "Enter a player's name to return what place they're in this week. \n";
    cin >> sName;
    int score = binarySrch(names,sName,SIZE8);
    if(score==-1){
@@ -475,6 +481,7 @@ void showStatic(){
 // display scoreboard banner
 void sBanner(string str, string p1Name, string p2Name, int p1Win, int p2Win){
     
+    
     // Display scoreboard banner       
         for(int k=0; k<=2; k++){
             ((k==0)||(k==2)) ? cout << "********************************\n"
@@ -547,10 +554,10 @@ void print2DArr(const char guessP1[][9], const char guessP2[][9],
                 cIndx2=col2;
                 }
             }
-        } 
-        
+        }         
     }
     
+    // sets max number of games and returns which player to use for a conditional in main()
     if(hit1>hit2){
         maxGms=hit1;
         winner=1;
@@ -769,7 +776,7 @@ void cGssArr(const char guessP1[][9], const char guessP2[][9],
     
     upper(name);    // change string to all uppercase letters
     
-    while(!found && first<=last){ // search between indicies [0,7]
+    while(!found && first<=last){ // search between indices [0,7]
         
         middle = (first + last)/2; // middle index
         if(names[middle]==name){ // check if middle indx equals name
@@ -793,16 +800,10 @@ void banner(string str){
     str="BATTLESHIP"; 
     
     for(int i=0; i<=2; i++){
-            switch(i){  // print a border or string depending on i
-                case 0:
-                case 2: {
-                    for(int j=0; j<32; j++){
-                        cout << "*";
-                    }
-                    cout << endl; break;
-                } case 1:{
-                    cout << setw(21) << str << endl; break;                    
-                } default: cout << "Error in game banner.\n";                                 
-            }
-        }        
+        if(i==0 || i==2){
+            for(int j=0; j<32; j++) {
+                cout << "*";       
+            } cout << endl;
+        } else  cout << setw(21) << str << endl;               
+    }        
 }
