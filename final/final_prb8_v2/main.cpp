@@ -1,7 +1,8 @@
 /* 
  * Note:  This time you create the strcmp() function that takes into
  * account the new sort order.
- passes tc 0 , 1
+   v1 passes tc 0
+ * v2 passes tc 1
  */
 
 //System Libraries Here
@@ -51,6 +52,7 @@ int main(int argc, char** argv) {
     
    // print(array,rowIn,colIn);
     //cout<<endl;
+    colIn=colDet>colIn ? colDet : colIn;
     
     //Compare the size input vs. size detected and sort if same
     //Else output different size
