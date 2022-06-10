@@ -1,7 +1,7 @@
 /* 
  * Note:  This time you create the strcmp() function that takes into
  * account the new sort order.
- *  v1 passes tc1
+ *  v1 passes tc 0
  */
 
 //System Libraries Here
