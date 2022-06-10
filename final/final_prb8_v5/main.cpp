@@ -24,6 +24,7 @@ void print(const char [][COLMAX],int,int);
 
 //int strcmp(char a[],char b[],char replace[],char with[]){
 int strcmp(char [],char [],const char [],const char []);//Replace sort order
+void swap1(char [],char []);//mine
 
 //Program Execution Begins Here
 int main(int argc, char** argv) {
@@ -73,27 +74,92 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-int strcmp(char a[],char b[],char replace[],char with[]){
+void sort(char array[][COLMAX],int rowSize,int colSize,const char replace[],const char with[]){
     
-    cout<<"hit strcmp";
+    //cout<<endl;
+    int maxEle;
+    int last=rowSize-1;
+    char ch[1]={'$'}, w[1]={'#'},temp[1]={};
+   
+    //how you reference one character in a single char array
+   //cout<< "ch "<<ch[0]<<endl;
+    
+   
+    //last is size of row minus 1, so last index in array.
+    // loops up to the 2nd index which is [1]. range is [(rowSize-1),1]    
+    //for(maxEle=last; maxEle>0;maxEle--){
+        
+        for(int row=0;row<rowSize;row++){ // starts at [0,lastIndx]
+            for(int col=0;col<colSize;col++){
+                
+                // reassign character value to 1st element in array[][]
+                ch[0]=array[row][col];
+                
+                //how you reference one character in a single char array
+                //cout<< "ch "<<ch[0]<<endl;
+                
+                // check each character in array against the replace[]
+                if(ch[0]==replace[0]){
+                //if(strcmp(array[row],array[row+1])<0) // if its larger, then swap
+                    
+                    cout<< "ch[] "<<ch[0]<<" == rpl[] "<<replace[0]<<endl;
+                    w[0]=with[0];
+                    cout<<"w[0] "<<w[0]<<endl;                    
+                    
+                    //swap1(ch[0],w[0]);
+                    //swap(array[row],array[row+1]);   
+                    temp[0]=ch[0];
+                    ch[0]=w[0];
+                    w[0]=temp[0]; 
+                    cout<<"new ch[0] "<<ch[0]<<endl;
+                
+                // check each character in array against the replace[]
+                } else if(ch[0]==replace[1]){
+                //if(strcmp(array[row],array[row+1])<0) // if its larger, then swap
+               
+                    cout<< "ch[] "<<ch[0]<<" == rpl[] "<<replace[1]<<endl;
+                    w[0]=with[1];
+                    cout<<"w[0] "<<w[1]<<endl;
+                    
+                    //swap1(ch[0],w[0]);
+                    //swap(array[row],array[row+1]); 
+                    temp[0]=ch[0];
+                    ch[0]=w[0];
+                    w[0]=temp[0]; 
+                    cout<<"new ch[0] "<<ch[0]<<endl;
+                    
+                }  else if(ch[0]==replace[2]){
+                //if(strcmp(array[row],array[row+1])<0) // if its larger, then swap
+               
+                    cout<< "ch[] "<<ch[0]<<" == rpl[] "<<replace[2]<<endl;
+                    w[0]=with[2];
+                    cout<<"w[0] "<<w[0]<<endl;
+                    
+                    //swap1(ch[0],w[0]);
+                    //swap(array[row],array[row+1]);   
+                    temp[0]=ch[0];
+                    ch[0]=w[0];
+                    w[0]=temp[0]; 
+                    cout<<"new ch[0] "<<ch[0]<<endl<<endl;
+                    
+                } else cout<<"";
+            }
+        }
+    //}
     
 }
 
-void sort(char array[][COLMAX],int rowIn,int colIn,const char replace[],const char with[]){
+// swap
+void swap1(char a[],char b[]){    
+    char temp[1]={};    
+    temp[0]=a[0];
+    a[0]=b[0];
+    b[0]=temp[0]; 
+}
+
+int strcmp(char a[],char b[],char replace[],char with[]){
     
-    //cout<<endl;
-    int maxEle, row;
-   int last=rowIn-1;
-   
-    // start at the last indx in array to the 2nd indx. starts at[last,1]
-    for(maxEle=last; maxEle>0;maxEle--){
-        
-        for(row=0;row<maxEle;row++){ // starts at [0,last]
-            
-            //if(strcmp(array[row],array[row+1])<0) // if its larger, then swap
-            swap(array[row],array[row+1]);
-        }
-    }
+    cout<<"hit strcmp";
     
 }
 
