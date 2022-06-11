@@ -119,6 +119,8 @@ int cmp(char asci[],char augA[],const char replace[],const char with[]){
     //loop [48,122]
     for(int indx=0;indx<strlen(with);indx++){
         
+        // reassign string value each time, so rplInx references the latest version of augA[]
+        newA=augA;
         rplIndx=newA.find(replace[indx]);
         wthIndx=newA.find(with[indx]);
         
