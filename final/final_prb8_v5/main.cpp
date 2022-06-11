@@ -6,6 +6,8 @@
  * v3 gets rid of strings and compares as char [][]
  * v4 got rid of strings passes 0 1
  * v5 still testing. fails everything
+ * v5: logic of what code needs to do, but it needs the ascii[] to reference
+ *     changed swap from reference variables to char[] with strcpy() instead
  */
 
 //System Libraries Here
@@ -30,7 +32,7 @@ void swap1(char [],char []);//mine
 int main(int argc, char** argv) {
     //Declare all Variables Here
     const int ROW=30;             //Only 20 required
-    char array[ROW][COLMAX]={{'M','a','r','k'},{'M','a','r','c'},{'M','a','r','y'}} ;      //Bigger than necessary 
+    char array[ROW][COLMAX]={{'M','a','k','y'},{'M','a','r','c'},{'M','a','r','y'}} ;      //Bigger than necessary 
     int colIn=4,colDet=4,rowIn=3,rowDet=3;//Row, Col input and detected
     char replace[COLMAX]={'c','k','y'},with[COLMAX]={'z','y','x'};//New sort order
          //a[COLMAX]={}, b[COLMAX]={};
@@ -96,8 +98,9 @@ void sort(char array[][COLMAX],int rowSize,int colSize,const char replace[],cons
                 ch[0]=array[row][col];
                 
                 //how you reference one character in a single char array
-                //cout<< "ch "<<ch[0]<<endl;
+                cout<< "ch "<<ch[0]<<endl;
                 
+                // c
                 // check each character in array against the replace[]
                 if(ch[0]==replace[0]){
                 //if(strcmp(array[row],array[row+1])<0) // if its larger, then swap
@@ -111,8 +114,9 @@ void sort(char array[][COLMAX],int rowSize,int colSize,const char replace[],cons
                     temp[0]=ch[0];
                     ch[0]=w[0];
                     w[0]=temp[0]; 
-                    cout<<"new ch[0] "<<ch[0]<<endl;
+                    cout<<"new ch[0] "<<ch[0]<<endl<<endl;
                 
+                    // k
                 // check each character in array against the replace[]
                 } else if(ch[0]==replace[1]){
                 //if(strcmp(array[row],array[row+1])<0) // if its larger, then swap
@@ -151,10 +155,11 @@ void sort(char array[][COLMAX],int rowSize,int colSize,const char replace[],cons
 
 // swap
 void swap1(char a[],char b[]){    
-    char temp[1]={};    
-    temp[0]=a[0];
-    a[0]=b[0];
-    b[0]=temp[0]; 
+    char temp[]={};    
+    strcpy(temp,a);
+    strcpy(a,b);
+    strcpy(b,temp);
+
 }
 
 int strcmp(char a[],char b[],char replace[],char with[]){
