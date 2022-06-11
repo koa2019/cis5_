@@ -30,7 +30,8 @@ void print(const char [][COLMAX],int,int);
 void prntAsci(char []); //mine
 void swap(char [],char []);
 //int strcmp(char a[],char b[],char replace[],char with[]){
-int cmp(char [],char [],const char [],const char []);//Replace sort order
+int compare(char [][COLMAX],int,int,char [],char [],const char [],const char []);//Replace sort order
+void getAscii(char [],char [],const char [],const char []);
 
 //Program Execution Begins Here
 int main(int argc, char** argv) {
@@ -71,15 +72,15 @@ int main(int argc, char** argv) {
     
     colIn=colDet>colIn ? colDet : colIn;
     
+    getAscii(asci,augA,replace,with);
+    
     print(array,rowIn,colIn);
     
     //Compare the size input vs. size detected and sort if same
     //Else output different size
-    if(rowDet==rowIn&&colDet==colIn){
-        
-       int n=cmp(asci,augA,replace,with);
-        sort(array,rowIn,colIn,replace,with);
+    if(rowDet==rowIn&&colDet==colIn){        
        
+        sort(array,rowIn,colIn,replace,with);       
         cout<<"The Sorted Array"<<endl;
         print(array,rowIn,colIn);
     }
@@ -91,14 +92,48 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-int cmp(char asci[],char augA[],const char replace[],const char with[]){
+//
+int compare(char array[][COLMAX],int rowIn,int colIn, char asci[],char augA[],const char replace[],const char with[]){
     
-    //cout<<"hit strcmp";
+
+}
+
+//
+void sort(char array[][COLMAX],int rowSize,int colSize,const char replace[],const char with[]){
+    
+    int maxEle;
+    int last=rowSize-1;
+    char ch[1]={'$'}, w[1]={'#'},temp[1]={};
+   
+    //how you reference one character in a single char array
+   //cout<< "ch "<<ch[0]<<endl;
+   
+    
+    for(int row=0;row<rowSize;row++){ // starts at [0,lastIndx]
+            for(int col=0;col<colSize;col++){
+            
+                // reassign character value to 1st element in array[][]
+                ch[0]=array[row][col];
+                
+                //how you reference one character in a single char array
+                cout<< "ch= "<<ch[0]<<endl;
+                
+                if(strcmp(array[row],array[row+1])<0) // if its larger, then swap
+                swap(array[row],array[row+1]);
+        }
+    }
+    
+    
+}
+
+// 
+void getAscii(char asci[],char augA[],const char replace[],const char with[]){    
+    
     char temp[COLMAX]={};
     int zero=48,z=122,range,rplIndx=0,wthIndx=0;
-    string str,aStr, newA;
+    string aStr, newA;
     
-    range=(z-zero)+1;
+    range=(z-zero)+1;// augmented Ascii range= number zero to lowercase 'z'
     
     // initialize char [] with ascii values from '0'==48 to 'z'==122
     for(int i=0,cnt=48;i<range;i++,cnt++){
@@ -114,39 +149,23 @@ int cmp(char asci[],char augA[],const char replace[],const char with[]){
     // char[] to strings
     aStr=asci;
     newA=augA;
-    //str=augA;
     
     //loop [48,122]
     for(int indx=0;indx<strlen(with);indx++){
         
         // reassign string value each time, so rplInx references the latest version of augA[]
         newA=augA;
-        rplIndx=newA.find(replace[indx]);
-        wthIndx=newA.find(with[indx]);
-        
+        rplIndx=newA.find(replace[indx]);   // return index of search value
+        wthIndx=newA.find(with[indx]);        
         cout<<"rplIndx  "<<rplIndx<<endl;
-        cout<<"wthIndx  "<<wthIndx<<endl;  
-         
-        swap(augA[rplIndx],augA[wthIndx]);
-        prntAsci(augA);
-        //cout<< "asci[] "<<augA[0]<<" == rpl[] "<<replace[0]<<endl;
-        //int w=str.at(with[0]);
-        //w[0]=with[0];
-        //cout<<"w[0] "<<w[0]<<endl;                    
-
-        //swap1(ch[0],w[0]);
-        //swap(array[row],array[row+1]);   
-        //strcpy(temp,augA);
-        //strcpy(augA,with);
-        //strcpy(with,temp); 
-        //cout<<"new augA[0] "<<augA[0]<<endl<<endl;
-    }  
-    
+        cout<<"wthIndx  "<<wthIndx<<endl;           
+        swap(augA[rplIndx],augA[wthIndx]);  // swap array indices within the same array
+        //prntAsci(augA);   //print char[]     
+    }      
     //cout<<endl<<"New ";
-    //prntAsci(asci,zero,z);
-    return zero;
-    
+    prntAsci(augA);   //print char[]    
 }
+
 // swap
 void swap(char a[],char b[]){    
     char temp[]={};    
@@ -154,27 +173,9 @@ void swap(char a[],char b[]){
     strcpy(a,b);
     strcpy(b,temp);
 }
-void sort(char array[][COLMAX],int rowIn,int colIn,const char replace[],const char with[]){
-    
-    int maxEle, row;
-    int last=rowIn-1;
-   
-    // start at the last indx in array to the 2nd indx. starts at[last,1]
-    for(maxEle=last; maxEle>0;maxEle--){
-        
-        for(row=0;row<maxEle;row++){ // starts at [0,last]
-            
-            if(strcmp(array[row],array[row+1])<0) // if its larger, then swap
-                swap(array[row],array[row+1]);
-        }
-    }
-    
-    
-}
 
 //Print the sorted 2-D array
-void print(const char arr[][COLMAX],int row,int col){
-   
+void print(const char arr[][COLMAX],int row,int col){   
     for(int r=0;r<row;r++){
         cout<<arr[r]<<endl;
     }
@@ -184,7 +185,8 @@ void print(const char arr[][COLMAX],int row,int col){
 void prntAsci(char arr[]){
     
     int size=strlen(arr); 
-    cout<<"size"<<size<<endl;
+    //cout<<"size"<<size<<endl;
+    
     for(int r=0;r<size;r++){
         cout<<arr[r];
     }
