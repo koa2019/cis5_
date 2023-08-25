@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 int compare(char array[][COLMAX],int rowIn,int colIn, char asci[],char augA[],const char replace[],const char with[]){
     
 
-}
+}//end of function
 
 //
 void sort(char array[][COLMAX],int rowSize,int colSize,const char replace[],const char with[]){
@@ -124,7 +124,7 @@ void sort(char array[][COLMAX],int rowSize,int colSize,const char replace[],cons
     }
     
     
-}
+}//end of function
 
 // 
 void getAscii(char asci[],char augA[],const char replace[],const char with[]){    
@@ -164,7 +164,7 @@ void getAscii(char asci[],char augA[],const char replace[],const char with[]){
     }      
     //cout<<endl<<"New ";
     prntAsci(augA);   //print char[]    
-}
+}//end of function
 
 // swap
 void swap(char a[],char b[]){    
